@@ -1,0 +1,428 @@
+/* ===== STYLES PERSONNALISÉS POUR LA GESTION DES RÉGIONS ===== */
+
+
+/* Container principal */
+
+.regions-container {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+    min-height: calc(100vh - 130px) !important;
+    padding: 20px 0 !important;
+}
+
+
+/* Card header avec gradient spécifique aux régions */
+
+.card-header-gradient-regions {
+    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%) !important;
+    color: white !important;
+    border-bottom: none !important;
+}
+
+.card-header-gradient-regions .card-title {
+    color: white !important;
+    font-weight: 600 !important;
+}
+
+.card-header-gradient-regions .btn-primary {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    color: white !important;
+    transition: all 0.3s ease !important;
+}
+
+.card-header-gradient-regions .btn-primary:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+    border-color: white !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+
+/* Filtres stylés */
+
+.filtres-section-regions {
+    background: white !important;
+    border-radius: 10px !important;
+    padding: 20px !important;
+    margin-bottom: 25px !important;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08) !important;
+    border: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+.filtres-section-regions label {
+    color: #2c3e50 !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    margin-bottom: 8px !important;
+}
+
+.filtres-section-regions .form-select {
+    border: 2px solid #e9ecef !important;
+    border-radius: 8px !important;
+    padding: 8px 15px !important;
+    transition: all 0.3s ease !important;
+    background-color: #f8f9fa !important;
+    font-size: 0.9rem !important;
+}
+
+.filtres-section-regions .form-select:focus {
+    border-color: #3498db !important;
+    box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25) !important;
+    background-color: white !important;
+}
+
+
+/* Table DataTable personnalisée */
+
+#regionsTable.table-regions {
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08) !important;
+    background: white !important;
+    width: 100% !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+#regionsTable.table-regions thead {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+    border-bottom: 3px solid #3498db !important;
+}
+
+#regionsTable.table-regions thead th {
+    color: #2c3e50 !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    font-size: 0.85rem !important;
+    letter-spacing: 0.5px !important;
+    padding: 15px 12px !important;
+    border: none !important;
+    position: relative !important;
+    vertical-align: middle !important;
+}
+
+#regionsTable.table-regions thead th:after {
+    content: '' !important;
+    position: absolute !important;
+    right: 0 !important;
+    top: 25% !important;
+    height: 50% !important;
+    width: 1px !important;
+    background: rgba(44, 62, 80, 0.2) !important;
+}
+
+#regionsTable.table-regions thead th:last-child:after {
+    display: none !important;
+}
+
+#regionsTable.table-regions tbody tr {
+    border-bottom: 1px solid #f1f3f4 !important;
+    transition: all 0.3s ease !important;
+}
+
+#regionsTable.table-regions tbody tr:hover {
+    background: linear-gradient(90deg, rgba(52, 152, 219, 0.05) 0%, rgba(41, 128, 185, 0.05) 100%) !important;
+    transform: scale(1.002) !important;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08) !important;
+}
+
+#regionsTable.table-regions tbody td {
+    padding: 15px 12px !important;
+    vertical-align: middle !important;
+    color: #495057 !important;
+    font-size: 0.95rem !important;
+    border: none !important;
+}
+
+
+/* Badges stylés pour régions */
+
+.badge-region {
+    padding: 6px 12px !important;
+    border-radius: 20px !important;
+    font-weight: 600 !important;
+    font-size: 0.8rem !important;
+    letter-spacing: 0.3px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    text-transform: uppercase !important;
+    display: inline-block !important;
+    text-align: center !important;
+    line-height: 1.2 !important;
+}
+
+.badge-nom-region {
+    background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%) !important;
+    color: white !important;
+}
+
+.badge-contenus-count-region {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%) !important;
+    color: white !important;
+    font-weight: 700 !important;
+    min-width: 40px !important;
+}
+
+
+/* Boutons d'action (garder les mêmes icônes) */
+
+.action-buttons-regions {
+    display: flex !important;
+    gap: 8px !important;
+    justify-content: center !important;
+    flex-wrap: nowrap !important;
+}
+
+.action-btn-region {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: none !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15) !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+}
+
+.action-btn-region:hover {
+    transform: translateY(-3px) scale(1.1) !important;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2) !important;
+}
+
+.action-btn-info-region {
+    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%) !important;
+    color: white !important;
+}
+
+.action-btn-warning-region {
+    background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%) !important;
+    color: white !important;
+}
+
+.action-btn-danger-region {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+    color: white !important;
+}
+
+.action-btn-region i {
+    font-size: 1rem !important;
+    line-height: 1 !important;
+}
+
+
+/* Description stylée */
+
+.description-region {
+    max-width: 300px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    cursor: help !important;
+    position: relative !important;
+    display: block !important;
+    color: #6c757d !important;
+    font-size: 0.9rem !important;
+}
+
+.description-region:hover::after {
+    content: attr(data-fulldesc) !important;
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    background: #2c3e50 !important;
+    color: white !important;
+    padding: 8px 12px !important;
+    border-radius: 6px !important;
+    font-size: 0.9rem !important;
+    z-index: 1000 !important;
+    white-space: normal !important;
+    width: 300px !important;
+    max-width: 90vw !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+}
+
+
+/* Statistiques dans show */
+
+.stats-region {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+    border-radius: 10px !important;
+    padding: 20px !important;
+    margin-bottom: 25px !important;
+    border: 2px solid #3498db !important;
+}
+
+.stat-item-region {
+    text-align: center !important;
+    padding: 15px !important;
+    background: white !important;
+    border-radius: 8px !important;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08) !important;
+    transition: all 0.3s ease !important;
+}
+
+.stat-item-region:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+.stat-number-region {
+    font-size: 2rem !important;
+    font-weight: 700 !important;
+    color: #3498db !important;
+    margin-bottom: 5px !important;
+}
+
+.stat-label-region {
+    font-size: 0.9rem !important;
+    color: #6c757d !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+}
+
+
+/* Responsive Design */
+
+@media (max-width: 768px) {
+    .filtres-section-regions .row>div {
+        margin-bottom: 15px !important;
+    }
+    .filtres-section-regions .col-md-6.text-end {
+        text-align: left !important;
+    }
+    #regionsTable.table-regions {
+        font-size: 0.9rem !important;
+    }
+    #regionsTable.table-regions thead th,
+    #regionsTable.table-regions tbody td {
+        padding: 10px 8px !important;
+    }
+    .action-buttons-regions {
+        flex-direction: column !important;
+        gap: 5px !important;
+    }
+    .action-btn-region {
+        width: 32px !important;
+        height: 32px !important;
+    }
+    .description-region {
+        max-width: 150px !important;
+    }
+    .stat-item-region {
+        margin-bottom: 15px !important;
+    }
+}
+
+
+/* Animation pour les lignes */
+
+@keyframes fadeInRegion {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#regionsTable.table-regions tbody tr {
+    animation: fadeInRegion 0.5s ease forwards !important;
+}
+
+#regionsTable.table-regions tbody tr:nth-child(even) {
+    animation-delay: 0.1s !important;
+}
+
+#regionsTable.table-regions tbody tr:nth-child(odd) {
+    animation-delay: 0.2s !important;
+}
+
+
+/* Formulaires */
+
+.form-card-region {
+    background: white !important;
+    border-radius: 12px !important;
+    padding: 30px !important;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08) !important;
+    border: 1px solid #e9ecef !important;
+}
+
+.form-card-region .form-label {
+    color: #2c3e50 !important;
+    font-weight: 600 !important;
+    margin-bottom: 8px !important;
+}
+
+.form-card-region .form-control,
+.form-card-region .form-select {
+    border: 2px solid #e9ecef !important;
+    border-radius: 8px !important;
+    padding: 10px 15px !important;
+    transition: all 0.3s ease !important;
+}
+
+.form-card-region .form-control:focus,
+.form-card-region .form-select:focus {
+    border-color: #3498db !important;
+    box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25) !important;
+}
+
+
+/* Boutons de formulaire */
+
+.btn-region-primary {
+    background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%) !important;
+    border: none !important;
+    color: white !important;
+    padding: 10px 25px !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn-region-primary:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3) !important;
+}
+
+.btn-region-secondary {
+    background: linear-gradient(135deg, #6c757d 0%, #495057 100%) !important;
+    border: none !important;
+    color: white !important;
+    padding: 10px 25px !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn-region-secondary:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3) !important;
+}
+
+
+/* Carte de région */
+
+.region-card {
+    background: white !important;
+    border-radius: 10px !important;
+    padding: 20px !important;
+    margin-bottom: 20px !important;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08) !important;
+    border-left: 4px solid #3498db !important;
+    transition: all 0.3s ease !important;
+}
+
+.region-card:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15) !important;
+}

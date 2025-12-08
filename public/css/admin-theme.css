@@ -1,0 +1,96 @@
+:root{
+  /* Typography */
+  --font-sans: "Source Sans 3", Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+  --base-font-size: 15px;
+
+  /* Palette (light) */
+  --color-primary: #0d6efd;
+  --color-accent: #20c997;
+  --color-muted: #6b7280;
+  --surface: #ffffff;
+  --card-bg: #ffffff;
+  --border: rgba(15,23,42,0.06);
+
+  /* Spacing & radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --shadow-sm: 0 1px 2px rgba(16,24,40,0.04);
+  --shadow-md: 0 6px 18px rgba(16,24,40,0.08);
+}
+
+/* Dark theme variables */
+:root[data-theme="dark"]{
+  --color-primary: #60a5fa;
+  --color-accent: #34d399;
+  --color-muted: #9ca3af;
+  --surface: #0b1220;
+  --card-bg: #071228;
+  --border: rgba(255,255,255,0.04);
+  --shadow-sm: 0 1px 2px rgba(2,6,23,0.6);
+  --shadow-md: 0 6px 18px rgba(2,6,23,0.55);
+}
+
+/* Global typography and background */
+html, body {
+  font-family: var(--font-sans);
+  font-size: var(--base-font-size);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #111827;
+  background-color: #f8fafc;
+}
+ :root[data-theme="dark"] html, :root[data-theme="dark"] body {
+  background-color: #040612;
+  color: #e6eef8;
+}
+
+/* Headings */
+h1,h2,h3,h4,h5,h6{ font-weight:600; letter-spacing:-0.01em; }
+
+/* Layout spacing */
+.app-main{ padding-top:1rem; }
+.app-content{ padding-top:.8rem; padding-bottom:1.5rem; }
+
+/* Cards */
+.card{ background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius-md); box-shadow:var(--shadow-sm); overflow:hidden }
+.card .card-header{ padding:.75rem 1rem; background:transparent; border-bottom:1px solid rgba(0,0,0,0.03) }
+.card .card-body{ padding:1rem }
+
+/* Navbar */
+.app-header{ background:var(--surface); border-bottom:1px solid rgba(0,0,0,0.04) }
+.app-header .nav-link{ color:var(--color-muted) }
+:root[data-theme="dark"] .app-header .nav-link{ color:var(--color-muted) }
+
+/* Sidebar */
+.app-sidebar{ background:var(--surface); border-right:1px solid rgba(0,0,0,0.03) }
+.sidebar-menu .nav-link{ color:var(--color-muted) }
+.sidebar-menu .nav-link.active{ color:var(--color-primary); background: rgba(13,110,253,0.04); border-radius:6px }
+
+/* Buttons */
+.btn-primary{ background: linear-gradient(180deg,var(--color-primary),#0b5ed7); border-color: rgba(11,93,215,0.9); color:#fff; box-shadow:0 4px 10px rgba(13,110,253,0.12); border-radius:var(--radius-sm); transition: transform .06s ease, box-shadow .12s ease }
+.btn-primary:hover{ transform: translateY(-1px) }
+.btn-secondary{ border-radius:var(--radius-sm) }
+
+/* Action buttons */
+.btn-action{ padding:.28rem .6rem; font-size:.85rem; border-radius:6px }
+.btn-show{ background-color:var(--color-primary); color:#fff; border:none }
+.btn-edit{ background-color:#ffc107; color:#111827; border:none }
+.btn-delete{ background-color:#ef4444; color:#fff; border:none }
+
+/* Tables */
+.table{ background:transparent }
+.table-responsive{ border-radius:var(--radius-md); overflow:hidden }
+table.dataTable thead th{ background: linear-gradient(180deg, rgba(0,0,0,0.02), transparent); border-bottom:1px solid rgba(0,0,0,0.06); font-weight:600 }
+table.dataTable tbody tr{ transition: background .12s ease, transform .06s ease }
+table.dataTable tbody tr:hover{ background: rgba(13,110,253,0.03); transform: translateY(-1px) }
+.table-sm tbody td, .table-sm thead th{ padding:.5rem .75rem }
+
+/* DataTables controls */
+.dataTables_wrapper .dataTables_filter input{ max-width:300px; border-radius:8px; border:1px solid rgba(15,23,42,0.08); padding:.38rem .6rem }
+
+/* Forms */
+input.form-control, textarea.form-control, select.form-select{ border-radius:8px; border:1px solid rgba(15,23,42,0.08); padding:.48rem .6rem }
+input.form-control:focus, textarea.form-control:focus, select.form-select:focus{ outline: none; box-shadow: 0 6px 18px rgba(13,110,253,0.08); border-color: var(--color-primary) }
+
+/* Responsive tweaks */
+@media (max-width:576px){ :root{ --base-font-size:14px } .btn-action{ padding:.22rem .45rem; font-size:.78rem } }
