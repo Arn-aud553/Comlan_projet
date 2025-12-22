@@ -78,6 +78,11 @@ class Media extends Model
         return $this->belongsTo(User::class, 'id_utilisateur');
     }
 
+    public function auteur()
+    {
+        return $this->utilisateur();
+    }
+
     public function paiements()
     {
         return $this->hasMany(Paiement::class, 'media_id', 'id_media');
@@ -123,6 +128,7 @@ class Media extends Model
         return [
             'image'    => 'Image',
             'video'    => 'Vidéo',
+            'audio'    => 'Audio',
             'document' => 'Document',
             'livre'    => 'Livre',
         ][$this->type_fichier] ?? ucfirst($this->type_fichier);
@@ -226,6 +232,7 @@ class Media extends Model
 
     public function isImage()    { return $this->type_fichier === 'image'; }
     public function isVideo()    { return $this->type_fichier === 'video'; }
+    public function isAudio()    { return $this->type_fichier === 'audio'; }
     public function isDocument() { return $this->type_fichier === 'document'; }
     public function isLivre()    { return $this->type_fichier === 'livre'; }
 

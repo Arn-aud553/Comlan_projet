@@ -21,10 +21,10 @@ class CheckClient
         $isAdminByEmail = in_array($user->email, $adminEmails);
         $isAdminByRole = $user->estAdmin(); // CHANGÉ ICI
         
-        if ($isAdminByEmail || $isAdminByRole) {
-            return redirect()->route('admin.dashboard')
-                ->with('error', 'Les administrateurs doivent utiliser le tableau de bord administrateur.');
-        }
+        // if ($isAdminByEmail || $isAdminByRole) {
+        //     return redirect()->route('admin.dashboard')
+        //         ->with('error', 'Les administrateurs doivent utiliser le tableau de bord administrateur.');
+        // }
 
         return $next($request);
     }

@@ -27,14 +27,14 @@
                                 <p><strong>Type :</strong> {{ $contenu->typeContenu->nom ?? 'Contenu' }}</p>
                             </div>
                             <div class="col-md-6 text-end">
-                                <h3 class="text-primary">{{ $contenu->prix_formate }}</h3>
+                                <h3 class="text-primary">{{ number_format($contenu->prix, 0, ',', ' ') }} FCFA</h3>
                                 <p class="text-muted small">Prix TTC • Paiement unique</p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Payment Form -->
-                    <form action="{{ route('client.contenus.paiement.process', $contenu->id) }}" method="POST" id="paymentForm">
+                    <form action="{{ route('client.contenus.paiement.process', $contenu->id_contenu) }}" method="POST" id="paymentForm">
                         @csrf
                         
                         <!-- Customer Info -->
@@ -126,9 +126,9 @@
                         <div class="d-grid gap-3">
                             <button type="submit" class="btn btn-success btn-lg py-3">
                                 <i class="fas fa-lock me-2"></i>
-                                Payer {{ $contenu->prix_formate }}
+                                Payer {{ number_format($contenu->prix, 0, ',', ' ') }} FCFA
                             </button>
-                            <a href="{{ route('client.contenus.detail', $contenu->id) }}" class="btn btn-outline-secondary">
+                            <a href="{{ route('client.contenus.detail', $contenu->id_contenu) }}" class="btn btn-outline-secondary">
                                 <i class="fas fa-arrow-left me-2"></i>
                                 Retour au contenu
                             </a>

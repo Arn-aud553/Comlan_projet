@@ -135,7 +135,7 @@ class UserController extends Controller
     public function index()
     {
         $users = \App\Models\User::orderBy('created_at', 'desc')->paginate(15);
-        return view('users.index', compact('users'));
+        return view('admin.users.index', compact('users'));
     }
 
     /**
@@ -143,7 +143,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.create');
+        return view('admin.users.create');
     }
 
     /**
@@ -152,11 +152,9 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nom_complet' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'sexe' => 'nullable|string|in:M,F,Autre',
-            'age' => 'nullable|integer|min:0|max:120',
-            'role' => 'required|string|in:admin,editeur,visiteur',
+            'role' => 'required|string|in:admin,manager,editeur,auteur,visiteur',
             'langue' => 'nullable|string',
         ]);
 
@@ -164,19 +162,17 @@ class UserController extends Controller
         $emailPrefix = explode('@', $validated['email'])[0];
         $autoPassword = $emailPrefix . '123';
 
-        // Créer l'utilisateur avec seulement les colonnes qui existent réellement dans la table
-        // La table users a 'name', pas 'nom_complet'
         $user = \App\Models\User::create([
-            'name' => $validated['nom_complet'],
+            'name' => $validated['name'],
+            'nom_complet' => $validated['name'], // Assurer que le nom complet est rempli
             'email' => $validated['email'],
-            'password' => $autoPassword, // Le mutator va le hasher
+            'password' => $autoPassword,
             'role' => $validated['role'],
             'langue' => $validated['langue'] ?? 'fr',
+            'email_verified_at' => now(), // Marquer comme vérifié immédiatement
         ]);
 
-        // Note: sexe et age ne sont pas stockés car ces colonnes n'existent pas dans la table users
-
-        return redirect()->route('users.index')
+        return redirect()->route('admin.users.index')
             ->with('success', "Utilisateur créé avec succès. Mot de passe : {$autoPassword}");
     }
 
@@ -186,7 +182,7 @@ class UserController extends Controller
     public function show($id)
     {
         $user = \App\Models\User::findOrFail($id);
-        return view('users.show', compact('user'));
+        return view('admin.users.show', compact('user'));
     }
 
     /**
@@ -195,7 +191,7 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = \App\Models\User::findOrFail($id);
-        return view('users.edit', compact('user'));
+        return view('admin.users.edit', compact('user'));
     }
 
     /**
@@ -206,26 +202,20 @@ class UserController extends Controller
         $user = \App\Models\User::findOrFail($id);
 
         $validated = $request->validate([
-            'nom_complet' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $id,
-            'sexe' => 'nullable|string|in:M,F,Autre',
-            'age' => 'nullable|integer|min:0|max:120',
-            'role' => 'required|string|in:admin,editeur,visiteur',
+            'role' => 'required|string|in:admin,manager,editeur,auteur,visiteur',
             'langue' => 'nullable|string',
         ]);
 
-        // Mettre à jour avec les champs existants réellement dans la table
-        // La table users a 'name', pas 'nom_complet'
         $user->update([
-            'name' => $validated['nom_complet'],
+            'name' => $validated['name'],
             'email' => $validated['email'],
             'role' => $validated['role'],
             'langue' => $validated['langue'] ?? $user->langue,
         ]);
 
-        // Note: sexe et age ne sont pas mis à jour car ces colonnes n'existent pas
-
-        return redirect()->route('users.index')
+        return redirect()->route('admin.users.index')
             ->with('success', 'Utilisateur mis à jour avec succès.');
     }
 
@@ -238,13 +228,13 @@ class UserController extends Controller
         
         // Empêcher la suppression de son propre compte
         if ($user->id === Auth::id()) {
-            return redirect()->route('users.index')
+            return redirect()->route('admin.users.index')
                 ->with('error', 'Vous ne pouvez pas supprimer votre propre compte.');
         }
 
         $user->delete();
 
-        return redirect()->route('users.index')
+        return redirect()->route('admin.users.index')
             ->with('success', 'Utilisateur supprimé avec succès.');
     }
 }

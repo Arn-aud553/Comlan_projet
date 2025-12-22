@@ -1,0 +1,32 @@
+/* Styles spécifiques pour le détail des contenus client */
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 30px;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.back-link:hover {
+    color: var(--secondary);
+}
+
+.info-section {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 30px;
+}
+
+.info-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: var(--text-main);
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--border-subtle);
+    padding-bottom: 10px;
+}

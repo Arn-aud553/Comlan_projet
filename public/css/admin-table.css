@@ -1,0 +1,156 @@
+/* 
+   Admin Table - Styles harmonisés 
+   Inspiré de la maquette fournie : 
+   - Recherche & Filtres dans des cartes distinctes en haut
+   - Table avec badges spécifiques (ID noir, codes violets, compteurs verts)
+   - Boutons d'action circulaires et colorés
+*/
+
+/* --- Cartes de Filtres et Recherche --- */
+.card-filter-header {
+    background: transparent;
+    border: none;
+    padding-bottom: 0;
+}
+
+.search-filter-container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.search-filter-title {
+    color: #4e73df; /* Primary Blue like maquette header */
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.search-filter-title i {
+    margin-right: 0.5rem;
+}
+
+.btn-export {
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.375rem 1rem;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+}
+
+.btn-export-copy { background-color: #6c757d; color: white; } /* Gris */
+.btn-export-excel { background-color: #1cc88a; color: white; } /* Vert */
+.btn-export-pdf { background-color: #e74a3b; color: white; } /* Rouge */
+.btn-export-print { background-color: #36b9cc; color: white; } /* Cyan */
+
+.btn-export:hover {
+    filter: brightness(90%);
+    color: white;
+    text-decoration: none;
+}
+
+/* --- Table Styles --- */
+.table-admin thead th {
+    background-color: #f8f9fc;
+    color: #4e73df;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    border-bottom: 1px solid #e3e6f0;
+    padding: 1rem 0.75rem;
+    vertical-align: middle;
+}
+
+.table-admin tbody td {
+    vertical-align: middle;
+    padding: 1rem 0.75rem;
+    font-size: 0.9rem;
+    color: #5a5c69;
+}
+
+/* Badges Spécifiques Maquette */
+.badge-id {
+    background-color: #000;
+    color: #fff;
+    border-radius: 50rem; /* Pill shape */
+    padding: 0.35em 0.8em;
+    font-weight: 700;
+    font-size: 0.75rem;
+    min-width: 45px;
+    display: inline-block;
+    text-align: center;
+}
+
+.badge-code {
+    background-color: #6f42c1; /* Purple */
+    color: white;
+    border-radius: 50% !important; /* Circle */
+    width: 35px;
+    height: 35px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+.badge-count {
+    background-color: #1cc88a; /* Green */
+    color: white;
+    padding: 0.35em 0.6em;
+    border-radius: 4px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+/* Boutons Actions Circulaires */
+.action-btn-group {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end; /* Align right like maquette */
+}
+
+.btn-action {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    color: white;
+    transition: transform 0.2s;
+}
+
+.btn-action:hover {
+    transform: scale(1.1);
+    color: white;
+}
+
+.btn-action-view { background-color: #36b9cc; } /* Info/Cyan */
+.btn-action-edit { background-color: #f6c23e; } /* Warning/Yellow */
+.btn-action-delete { background-color: #e74a3b; } /* Danger/Red */
+
+/* Pagination Style Override (si besoin pour matcher le bas de la maquette) */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 0.3rem 0.8rem;
+    margin-left: 0.2rem;
+    border-radius: 4px;
+    border: 1px solid #e3e6f0;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: #4e73df;
+    color: white !important;
+    border-color: #4e73df;
+}

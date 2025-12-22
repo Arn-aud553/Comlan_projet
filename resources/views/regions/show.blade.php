@@ -3,7 +3,7 @@
 @section('title', 'Détails de la Région')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/regions.css') }}">
+<link rel="stylesheet" href="{{ asset('css/admin-table.css') }}">
 @endpush
 
 @section('content')
@@ -12,7 +12,7 @@
         <div class="col-12">
             <div class="card shadow-lg border-0">
                 <!-- En-tête avec gradient -->
-                <div class="card-header card-header-gradient-regions py-3">
+                <div class="card-header card-header-gradient py-3">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex align-items-center">
                             <div class="icon-wrapper me-3">
@@ -26,7 +26,7 @@
                             </div>
                         </div>
                         <div>
-                            <a href="{{ route('regions.index') }}" class="btn btn-outline-light btn-sm">
+                            <a href="{{ route('admin.regions.index') }}" class="btn btn-outline-light btn-sm">
                                 <i class="bi bi-arrow-left me-2"></i> Retour
                             </a>
                         </div>
@@ -36,13 +36,11 @@
                 <!-- Corps de la carte -->
                 <div class="card-body p-4">
                     <!-- Statistiques -->
-                    <div class="stats-region mb-4">
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <div class="stat-item-region">
-                                    <div class="stat-number-region">{{ $region->contenus_count }}</div>
-                                    <div class="stat-label-region">Contenus associés</div>
-                                </div>
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <div class="p-3 bg-light rounded text-center border">
+                                <div class="display-6 fw-bold text-primary">{{ $region->contenus_count }}</div>
+                                <div class="text-muted text-uppercase small">Contenus associés</div>
                             </div>
                         </div>
                     </div>
@@ -65,7 +63,7 @@
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label text-muted small">Code région</label>
                                             <div class="p-3 bg-light rounded">
-                                                <span class="badge badge-nom-region">ID: {{ $region->id_region }}</span>
+                                                <span class="badge badge-id">ID: {{ $region->id_region }}</span>
                                             </div>
                                         </div>
                                         <div class="col-12 mb-3">
@@ -102,13 +100,13 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="d-grid gap-2">
-                                        <a href="{{ route('regions.edit', $region->id_region) }}" class="btn btn-region-primary">
+                                        <a href="{{ route('admin.regions.edit', $region->id_region) }}" class="btn btn-action-primary text-white">
                                             <i class="bi bi-pencil me-2"></i> Modifier la région
                                         </a>
-                                        <a href="{{ route('contenus.index') }}?region={{ $region->id_region }}" class="btn btn-outline-primary">
+                                        <a href="{{ route('admin.contenus.index') }}?region={{ $region->id_region }}" class="btn btn-outline-primary">
                                             <i class="bi bi-file-text me-2"></i> Voir les contenus
                                         </a>
-                                        <form action="{{ route('regions.destroy', $region->id_region) }}" method="POST" onsubmit="return confirmDeleteRegion({{ $region->contenus_count }})">
+                                        <form action="{{ route('admin.regions.destroy', $region->id_region) }}" method="POST" onsubmit="return confirmDeleteRegion({{ $region->contenus_count }})">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger w-100">
@@ -125,7 +123,7 @@
                     <div class="card border-0 shadow-sm">
                         <div class="card-header bg-light d-flex justify-content-between align-items-center">
                             <h6 class="mb-0"><i class="bi bi-file-text me-2"></i>Contenus Associés ({{ $contenus->total() }})</h6>
-                            <a href="{{ route('contenus.create') }}?region={{ $region->id_region }}" class="btn btn-sm btn-primary">
+                            <a href="{{ route('admin.contenus.create') }}?region={{ $region->id_region }}" class="btn btn-sm btn-primary">
                                 <i class="bi bi-plus-circle me-1"></i> Ajouter un contenu
                             </a>
                         </div>
@@ -155,8 +153,8 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                @if($contenu->type_contenu)
-                                                    <span class="badge bg-secondary">{{ $contenu->type_contenu->nom }}</span>
+                                                @if($contenu->typeContenu)
+                                                    <span class="badge bg-secondary">{{ $contenu->typeContenu->nom }}</span>
                                                 @endif
                                             </td>
                                             <td>
@@ -171,14 +169,14 @@
                                                 <small>{{ $contenu->created_at->format('d/m/Y') }}</small>
                                             </td>
                                             <td>
-                                                <div class="action-buttons-regions">
-                                                    <a href="{{ route('contenus.show', $contenu->id_contenu) }}" 
-                                                       class="action-btn-region action-btn-info-region" 
+                                                <div class="action-btn-group">
+                                                    <a href="{{ route('admin.contenus.show', $contenu->id_contenu) }}" 
+                                                       class="btn-action btn-action-view" 
                                                        title="Voir">
                                                         <i class="bi bi-eye"></i>
                                                     </a>
-                                                    <a href="{{ route('contenus.edit', $contenu->id_contenu) }}" 
-                                                       class="action-btn-region action-btn-warning-region" 
+                                                    <a href="{{ route('admin.contenus.edit', $contenu->id_contenu) }}" 
+                                                       class="btn-action btn-action-edit" 
                                                        title="Modifier">
                                                         <i class="bi bi-pencil"></i>
                                                     </a>
@@ -201,7 +199,7 @@
                             <div class="text-center py-4">
                                 <i class="bi bi-file-text display-4 text-muted mb-3"></i>
                                 <p class="text-muted">Aucun contenu associé à cette région pour le moment.</p>
-                                <a href="{{ route('contenus.create') }}?region={{ $region->id_region }}" class="btn btn-primary">
+                                <a href="{{ route('admin.contenus.create') }}?region={{ $region->id_region }}" class="btn btn-primary">
                                     <i class="bi bi-plus-circle me-2"></i> Créer le premier contenu
                                 </a>
                             </div>

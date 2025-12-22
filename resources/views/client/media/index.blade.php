@@ -73,8 +73,19 @@
             display: block; 
             text-decoration: none; 
             color: inherit;
-            flex: 0 0 auto; /* Don't grow, don't shrink, auto basis */
-            width: 300px;   /* Fixed width for consistent cards */
+            width: calc(33.333% - 20px); /* 3 cards per row on desktop */
+            min-width: 280px;
+        }
+
+        @media (max-width: 1024px) {
+            .gallery-link { width: calc(50% - 15px); }
+        }
+
+        @media (max-width: 640px) {
+            .gallery-link { width: 100%; }
+            .gallery-container { padding: 0 20px; }
+            .header-section { padding: 30px 20px; }
+            .page-title { font-size: 24px; }
         }
         /* ... existing styles ... */
         .gallery-item:hover {

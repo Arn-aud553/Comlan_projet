@@ -246,6 +246,11 @@
                     @else
                         <i class="fas fa-book"></i>
                     @endif
+
+                    <!-- Media Type Icons Overlay -->
+                    <div style="position: absolute; bottom: 10px; right: 10px;">
+                        @include('partials.media-type-indicators', ['contenu' => $contenu, 'size' => '28px', 'fontSize' => '0.8rem'])
+                    </div>
                 </div>
                 <div class="book-details">
                     <h3 class="book-title">{{ $contenu->titre ?? 'Titre non défini' }}</h3>
@@ -281,7 +286,7 @@
                     </div>
                     
                     <div class="card-actions">
-                        <a href="{{ route('client.book.details', ['id' => $contenu->id_contenu]) }}" class="btn-offer" style="text-decoration:none; display:inline-block; text-align:center;">Voir Détails</a>
+                        <a href="{{ route('client.contenus.detail', ['id' => $contenu->id_contenu]) }}" class="btn-offer" style="text-decoration:none; display:inline-block; text-align:center;">Voir Détails</a>
                         <button class="btn-critique">Critiques</button>
                     </div>
                 </div>

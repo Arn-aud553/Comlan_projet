@@ -30,7 +30,7 @@ class RegionController extends Controller
         
         Region::create($data);
         
-        return redirect()->route('regions.index')
+        return redirect()->route('admin.regions.index')
                          ->with('success', 'Région créée avec succès.');
     }
 
@@ -38,7 +38,7 @@ class RegionController extends Controller
     {
         // Charger les contenus associés avec pagination
         $contenus = $region->contenus()
-                          ->with(['langue', 'type_contenu', 'auteur'])
+                          ->with(['langue', 'typeContenu', 'auteur'])
                           ->orderBy('id_contenu', 'desc')
                           ->paginate(10);
         
@@ -61,7 +61,7 @@ class RegionController extends Controller
         
         $region->update($data);
         
-        return redirect()->route('regions.index')
+        return redirect()->route('admin.regions.index')
                          ->with('success', 'Région mise à jour avec succès.');
     }
 
@@ -69,13 +69,13 @@ class RegionController extends Controller
     {
         // Vérifier si la région est utilisée
         if ($region->contenus()->count() > 0) {
-            return redirect()->route('regions.index')
+            return redirect()->route('admin.regions.index')
                              ->with('error', 'Impossible de supprimer cette région car elle est associée à des contenus.');
         }
         
         $region->delete();
         
-        return redirect()->route('regions.index')
+        return redirect()->route('admin.regions.index')
                          ->with('success', 'Région supprimée avec succès.');
     }
     

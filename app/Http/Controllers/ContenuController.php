@@ -7,9 +7,11 @@ use App\Models\Langue;
 use App\Models\Region;
 use App\Models\TypeContenu;
 use App\Models\User;
+use App\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ContenuController extends Controller
 {
@@ -63,7 +65,7 @@ class ContenuController extends Controller
         $data = $request->validate([
             'titre' => 'required|string|max:255',
             'texte' => 'required|string',
-            'statut' => 'required|in:publié,en attente,brouillon,rejeté',
+            'statut' => 'required|in:publie,en attente,brouillon,rejete',
             'date_validation' => 'nullable|date',
             'date_creation' => 'nullable|date',
             'id_region' => 'required|exists:regions,id_region',
@@ -71,6 +73,7 @@ class ContenuController extends Controller
             'id_moderateur' => 'nullable|exists:users,id',
             'id_type_contenu' => 'required|exists:type_contenus,id_type_contenu',
             'id_auteur' => 'required|exists:users,id',
+            'medias.*' => 'nullable|file|mimes:jpeg,png,jpg,gif,mp4,mov,avi|max:20480', // Max 20MB
         ], [
             'titre.required' => 'Le titre est obligatoire.',
             'texte.required' => 'Le contenu texte est obligatoire.',
@@ -78,6 +81,8 @@ class ContenuController extends Controller
             'id_langue.required' => 'La langue est obligatoire.',
             'id_type_contenu.required' => 'Le type de contenu est obligatoire.',
             'id_auteur.required' => 'L\'auteur est obligatoire.',
+            'medias.*.mimes' => 'Format de fichier non supporté (images ou vidéos uniquement).',
+            'medias.*.max' => 'Fichier trop volumineux (max 20Mo).',
         ]);
         
         try {
@@ -87,17 +92,22 @@ class ContenuController extends Controller
             }
             
             // Si le statut est publié et pas de modérateur, utiliser l'utilisateur courant si modérateur/admin
-            if ($data['statut'] == 'publié' && empty($data['id_moderateur']) && 
+            if ($data['statut'] == 'publie' && empty($data['id_moderateur']) && 
                 (Auth::user()->role == 'moderateur' || Auth::user()->role == 'admin')) {
                 $data['id_moderateur'] = Auth::id();
             }
             
             // Si le statut est publié et pas de date de validation, utiliser la date actuelle
-            if ($data['statut'] == 'publié' && empty($data['date_validation'])) {
+            if ($data['statut'] == 'publie' && empty($data['date_validation'])) {
                 $data['date_validation'] = now();
             }
             
-            Contenu::create($data);
+            $contenu = Contenu::create($data);
+
+            // Gérer l'upload des médias
+            if ($request->hasFile('medias')) {
+                $this->handleMediaUploads($request->file('medias'), $contenu);
+            }
             
             return redirect()->route('contenus.index')
                              ->with('success', 'Contenu créé avec succès.');
@@ -105,40 +115,18 @@ class ContenuController extends Controller
             Log::error('Erreur création contenu: ' . $e->getMessage());
             
             return back()->withInput()
-                         ->with('error', 'Erreur lors de la création. Veuillez réessayer.');
+                         ->with('error', 'Erreur lors de la création: ' . $e->getMessage());
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Contenu $contenu)
-    {
-        $contenu->load(['langue', 'region', 'typeContenu', 'auteur', 'moderateur']);
-        $contenu->loadCount(['media', 'commentaires']);
-        
-        return view('contenus.show', compact('contenu'));
-    }
+    // ... (keep intervening methods) ...
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Contenu $contenu)
-    {
-        $data = $this->getFormData();
-        $data['contenu'] = $contenu;
-        return view('contenus.edit', $data);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Contenu $contenu)
     {
         $data = $request->validate([
             'titre' => 'required|string|max:255',
             'texte' => 'required|string',
-            'statut' => 'required|in:publié,en attente,brouillon,rejeté',
+            'statut' => 'required|in:publie,en attente,brouillon,rejete,supprimé',
             'date_validation' => 'nullable|date',
             'date_creation' => 'required|date',
             'id_region' => 'required|exists:regions,id_region',
@@ -146,6 +134,7 @@ class ContenuController extends Controller
             'id_moderateur' => 'nullable|exists:users,id',
             'id_type_contenu' => 'required|exists:type_contenus,id_type_contenu',
             'id_auteur' => 'required|exists:users,id',
+            'medias.*' => 'nullable|file|mimes:jpeg,png,jpg,gif,mp4,mov,avi|max:20480',
         ], [
             'titre.required' => 'Le titre est obligatoire.',
             'texte.required' => 'Le contenu texte est obligatoire.',
@@ -158,17 +147,36 @@ class ContenuController extends Controller
         
         try {
             // Si le statut passe à publié et pas de modérateur, utiliser l'utilisateur courant si modérateur/admin
-            if ($data['statut'] == 'publié' && empty($data['id_moderateur']) && 
+            if ($data['statut'] == 'publie' && empty($data['id_moderateur']) && 
                 (Auth::user()->role == 'moderateur' || Auth::user()->role == 'admin')) {
                 $data['id_moderateur'] = Auth::id();
             }
             
             // Si le statut passe à publié et pas de date de validation, utiliser la date actuelle
-            if ($data['statut'] == 'publié' && empty($data['date_validation'])) {
+            if ($data['statut'] == 'publie' && empty($data['date_validation'])) {
                 $data['date_validation'] = now();
             }
             
             $contenu->update($data);
+
+            // Gérer la suppression des médias
+            if ($request->has('delete_media')) {
+                foreach ($request->delete_media as $mediaId) {
+                    $media = Media::find($mediaId);
+                    if ($media && $media->id_contenu == $contenu->id_contenu) {
+                        // Supprimer le fichier
+                        if (Storage::disk('public')->exists($media->chemin_fichier)) {
+                            Storage::disk('public')->delete($media->chemin_fichier);
+                        }
+                        $media->delete();
+                    }
+                }
+            }
+
+            // Gérer l'ajout de nouveaux médias
+            if ($request->hasFile('medias')) {
+                $this->handleMediaUploads($request->file('medias'), $contenu);
+            }
             
             return redirect()->route('contenus.index')
                              ->with('success', 'Contenu mis à jour avec succès.');
@@ -176,7 +184,49 @@ class ContenuController extends Controller
             Log::error('Erreur mise à jour contenu: ' . $e->getMessage());
             
             return back()->withInput()
-                         ->with('error', 'Erreur lors de la mise à jour. Veuillez réessayer.');
+                         ->with('error', 'Erreur lors de la mise à jour: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Gérer l'upload de multiples fichiers média
+     */
+    private function handleMediaUploads($files, Contenu $contenu)
+    {
+        foreach ($files as $file) {
+            $originalName = $file->getClientOriginalName();
+            $extension = $file->getClientOriginalExtension();
+            $mimeType = $file->getMimeType();
+            $fileSize = $file->getSize();
+            
+            // Déterminer le type de fichier
+            $typeFichier = 'document';
+            if (str_starts_with($mimeType, 'image/')) {
+                $typeFichier = 'image';
+            } elseif (str_starts_with($mimeType, 'video/')) {
+                $typeFichier = 'video';
+            }
+
+            // Générer un nom unique
+            $fileName = uniqid() . '_' . time() . '.' . $extension;
+            
+            // Sauvegarder le fichier dans le dossier public (accessible via le lien symbolique)
+            $path = $file->storeAs('uploads/contenus/' . $contenu->id_contenu, $fileName, 'public');
+
+            // Créer l'entrée en base de données
+            Media::create([
+                'nom_fichier' => $originalName,
+                'titre' => pathinfo($originalName, PATHINFO_FILENAME),
+                'description' => 'Média uploadé pour ' . $contenu->titre,
+                'chemin_fichier' => $path,
+                'type_fichier' => $typeFichier,
+                'extension' => $extension,
+                'taille_fichier' => $fileSize,
+                'mime_type' => $mimeType,
+                'prix' => 0, // Gratuit par défaut via admin upload
+                'id_contenu' => $contenu->id_contenu,
+                'id_utilisateur' => Auth::id(),
+            ]);
         }
     }
 
@@ -257,14 +307,14 @@ class ContenuController extends Controller
     public function changerStatut(Request $request, Contenu $contenu)
     {
         $request->validate([
-            'statut' => 'required|in:publié,en attente,brouillon,rejeté'
+            'statut' => 'required|in:publie,en attente,brouillon,rejete'
         ]);
         
         try {
             $data = ['statut' => $request->statut];
             
             // Si le statut passe à publié, ajouter le modérateur et la date
-            if ($request->statut == 'publié') {
+            if ($request->statut == 'publie') {
                 $data['id_moderateur'] = Auth::id();
                 $data['date_validation'] = now();
             }
@@ -291,7 +341,7 @@ class ContenuController extends Controller
     public function indexClient()
     {
         $contenus = Contenu::with(['langue', 'region', 'typeContenu', 'auteur'])
-                          ->where('statut', 'publié')
+                          ->where('statut', 'publie')
                           ->orderBy('date_creation', 'desc')
                           ->paginate(12);
         

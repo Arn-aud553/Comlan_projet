@@ -21,7 +21,7 @@
                             <div>
                                 <h5 class="card-title mb-0 fs-4">Modifier le Commentaire</h5>
                                 <p class="mb-0 opacity-75" style="font-size: 0.9rem;">
-                                    #{{ $commentaire->id_commentaire }}
+                                    {{ $commentaire->id_commentaire }}
                                 </p>
                             </div>
                         </div>

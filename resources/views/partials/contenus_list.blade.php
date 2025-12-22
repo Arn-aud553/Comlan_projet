@@ -19,7 +19,7 @@
                 @foreach($typeContenu->contenus as $contenu)
                 <tr>
                     <td>
-                        <span class="badge bg-dark">#{{ $contenu->id_contenu }}</span>
+                        <span class="badge bg-dark">{{ $contenu->id_contenu }}</span>
                     </td>
                     <td>
                         <div class="d-flex align-items-center">

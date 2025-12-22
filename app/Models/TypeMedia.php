@@ -10,6 +10,7 @@ class TypeMedia extends Model
     use HasFactory;
 
     protected $table = 'type_media';
+    protected $primaryKey = 'id_type_media';
 
     protected $fillable = [
         'nom_media',

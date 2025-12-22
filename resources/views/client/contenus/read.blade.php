@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $book['title'] }} - Lecture</title>
+    <title>{{ $contenu->titre }} - Lecture</title>
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -116,10 +116,10 @@
 <body>
 
     <header class="reader-header">
-        <a href="{{ route('client.book.details', ['id' => $book['id']]) }}" class="back-link">
+        <a href="{{ route('client.contenus.detail', $contenu->id_contenu) }}" class="back-link">
             <i class="fas fa-arrow-left"></i> Retour aux détails
         </a>
-        <div class="book-title">{{ $book['title'] }}</div>
+        <div class="book-title">{{ $contenu->titre }}</div>
         <div style="width: 100px;"></div> <!-- Spacer -->
     </header>
 
@@ -127,19 +127,17 @@
         <h2 class="chapter-title">Page {{ $currentPage }}</h2>
         
         <div class="content-text">
-            @foreach($content as $paragraph)
-                <p>{{ $paragraph }}</p>
-            @endforeach
+            {!! $content !!}
         </div>
 
         <div class="pagination-bar">
-            <a href="{{ route('client.book.read', ['id' => $book['id'], 'page' => $currentPage - 1]) }}" class="page-btn {{ $currentPage <= 1 ? 'disabled' : '' }}">
+            <a href="{{ route('client.contenus.read', ['id' => $contenu->id_contenu, 'page' => $currentPage - 1]) }}" class="page-btn {{ $currentPage <= 1 ? 'disabled' : '' }}">
                 <i class="fas fa-chevron-left"></i> Précédent
             </a>
             
             <span class="page-info">Page {{ $currentPage }} sur {{ $totalPages }}</span>
             
-            <a href="{{ route('client.book.read', ['id' => $book['id'], 'page' => $currentPage + 1]) }}" class="page-btn {{ $currentPage >= $totalPages ? 'disabled' : '' }}">
+            <a href="{{ route('client.contenus.read', ['id' => $contenu->id_contenu, 'page' => $currentPage + 1]) }}" class="page-btn {{ $currentPage >= $totalPages ? 'disabled' : '' }}">
                 Suivant <i class="fas fa-chevron-right"></i>
             </a>
         </div>

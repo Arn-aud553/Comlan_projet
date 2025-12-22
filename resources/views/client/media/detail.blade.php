@@ -117,7 +117,7 @@
                                 <p class="text-muted">
                                     <i class="fas fa-lock"></i> Ce média nécessite un paiement
                                 </p>
-                                <a href="{{ route('client.payment.prompt', $media->id) }}" 
+                                <a href="{{ route('client.media.paiement', $media->id) }}" 
                                    class="btn btn-success btn-pay w-100 mb-3">
                                     <i class="fas fa-shopping-cart"></i> Acheter maintenant
                                 </a>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $theme['title'] }} - La Culture du Bénin</title>
+    <title>{{ $themeTitle }} - La Culture du Bénin</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" defer></script>
@@ -40,6 +40,18 @@
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+        .content-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .content-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
         .footer {
             background-color: #343a40;
             color: white;
@@ -75,10 +87,37 @@
             <i class="bi bi-arrow-left"></i> Retour aux thématiques
         </a>
         
-        <h1 class="theme-title">{{ $theme['title'] }}</h1>
+        <h1 class="theme-title">{{ $themeTitle }}</h1>
         
         <div class="theme-content">
-            <p>{{ $theme['content'] }}</p>
+            @if($contenus->count() > 0)
+                <p class="mb-4">Découvrez {{ $contenus->total() }} contenu(s) sur le thème "{{ $themeTitle }}"</p>
+                
+                @foreach($contenus as $contenu)
+                    <div class="content-card">
+                        <h3>{{ $contenu->titre }}</h3>
+                        <p class="text-muted">
+                            <i class="bi bi-person"></i> {{ $contenu->auteur->nom_complet ?? 'Auteur inconnu' }} |
+                            <i class="bi bi-calendar"></i> {{ $contenu->date_publication ? $contenu->date_publication->format('d/m/Y') : 'Non publié' }}
+                            @if($contenu->region)
+                                | <i class="bi bi-geo-alt"></i> {{ $contenu->region->nom_region }}
+                            @endif
+                        </p>
+                        <p>{{ Str::limit($contenu->texte, 200) }}</p>
+                        <a href="{{ route('contenus.show', $contenu->id_contenu) }}" class="btn btn-primary btn-sm">
+                            Lire la suite <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                @endforeach
+
+                <div class="mt-4">
+                    {{ $contenus->links() }}
+                </div>
+            @else
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i> Aucun contenu disponible pour ce thème pour le moment.
+                </div>
+            @endif
         </div>
     </div>
 

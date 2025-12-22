@@ -122,7 +122,7 @@
                                 <tr>
                                     <td>
                                         <span class="badge bg-dark rounded-pill px-3 py-2">
-                                            #{{ str_pad($commentaire->id_commentaire, 4, '0', STR_PAD_LEFT) }}
+                                            {{ str_pad($commentaire->id_commentaire, 4, '0', STR_PAD_LEFT) }}
                                         </span>
                                     </td>
                                     <td>

@@ -44,7 +44,7 @@ class TypeContenuController extends Controller
         try {
             TypeContenu::create($data);
             
-            return redirect()->route('type_contenus.index')
+            return redirect()->route('admin.type_contenus.index')
                              ->with('success', 'Type de contenu créé avec succès.');
         } catch (\Exception $e) {
             Log::error('Erreur création type_contenu: ' . $e->getMessage());
@@ -91,7 +91,7 @@ class TypeContenuController extends Controller
         try {
             $typeContenu->update($data);
             
-            return redirect()->route('type_contenus.index')
+            return redirect()->route('admin.type_contenus.index')
                              ->with('success', 'Type de contenu mis à jour avec succès.');
         } catch (\Exception $e) {
             Log::error('Erreur mise à jour type_contenu: ' . $e->getMessage());
@@ -109,13 +109,13 @@ class TypeContenuController extends Controller
         try {
             // Vérifier si des contenus utilisent ce type
             if ($typeContenu->contenus()->exists()) {
-                return redirect()->route('type_contenus.index')
+                return redirect()->route('admin.type_contenus.index')
                                  ->with('error', 'Impossible de supprimer : ce type est utilisé par ' . $typeContenu->contenus()->count() . ' contenu(s).');
             }
             
             $typeContenu->delete();
             
-            return redirect()->route('type_contenus.index')
+            return redirect()->route('admin.type_contenus.index')
                              ->with('success', 'Type de contenu supprimé avec succès.');
         } catch (\Exception $e) {
             Log::error('Erreur suppression type_contenu: ' . $e->getMessage());

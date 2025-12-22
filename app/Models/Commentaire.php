@@ -8,6 +8,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * Class Commentaire
@@ -16,31 +17,33 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $texte
  * @property int|null $note
  * @property int $id_contenu
- * @property int|null $id_utilisateur
+ * @property int $user_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * 
  * @property Contenu $contenu
- * @property Utilisateur|null $utilisateur
+ * @property User $user
  *
  * @package App\Models
  */
 class Commentaire extends Model
 {
+	use HasFactory;
 	protected $table = 'commentaires';
 	protected $primaryKey = 'id_commentaire';
 
 	protected $casts = [
 		'note' => 'int',
 		'id_contenu' => 'int',
-		'id_utilisateur' => 'int'
+		'user_id' => 'int'
 	];
 
 	protected $fillable = [
 		'texte',
 		'note',
 		'id_contenu',
-		'id_utilisateur'
+		'user_id',
+		'statut'
 	];
 
 	public function contenu()
@@ -48,8 +51,8 @@ class Commentaire extends Model
 		return $this->belongsTo(Contenu::class, 'id_contenu');
 	}
 
-	public function utilisateur()
+	public function user()
 	{
-		return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
+		return $this->belongsTo(User::class, 'user_id');
 	}
 }

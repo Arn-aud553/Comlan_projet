@@ -3,7 +3,7 @@
 @section('title', 'Détails de la Langue')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/langues.css') }}">
+<link rel="stylesheet" href="{{ asset('css/admin-table.css') }}">
 @endpush
 
 @section('content')
@@ -12,7 +12,7 @@
         <div class="col-12">
             <div class="card shadow-lg border-0">
                 <!-- En-tête avec gradient -->
-                <div class="card-header card-header-gradient-langues py-3">
+                <div class="card-header card-header-gradient py-3">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex align-items-center">
                             <div class="icon-wrapper me-3">
@@ -26,7 +26,7 @@
                             </div>
                         </div>
                         <div>
-                            <a href="{{ route('langues.index') }}" class="btn btn-outline-light btn-sm">
+                            <a href="{{ route('admin.langues.index') }}" class="btn btn-outline-light btn-sm">
                                 <i class="bi bi-arrow-left me-2"></i> Retour
                             </a>
                         </div>
@@ -120,13 +120,13 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="d-grid gap-2">
-                                        <a href="{{ route('langues.edit', $langue->id_langue) }}" class="btn btn-langue-primary">
+                                        <a href="{{ route('admin.langues.edit', $langue->id_langue) }}" class="btn btn-action-primary text-white">
                                             <i class="bi bi-pencil me-2"></i> Modifier la langue
                                         </a>
-                                        <a href="{{ route('contenus.index') }}?langue={{ $langue->id_langue }}" class="btn btn-outline-primary">
+                                        <a href="{{ route('admin.contenus.index') }}?langue={{ $langue->id_langue }}" class="btn btn-outline-primary">
                                             <i class="bi bi-file-text me-2"></i> Voir les contenus
                                         </a>
-                                        <form action="{{ route('langues.destroy', $langue->id_langue) }}" method="POST" onsubmit="return confirmDeleteLangue({{ $langue->contenus_count ?? 0 }})">
+                                        <form action="{{ route('admin.langues.destroy', $langue->id_langue) }}" method="POST" onsubmit="return confirmDeleteLangue({{ $langue->contenus_count ?? 0 }})">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger w-100">
@@ -143,7 +143,7 @@
                     <div class="card border-0 shadow-sm">
                         <div class="card-header bg-light d-flex justify-content-between align-items-center">
                             <h6 class="mb-0"><i class="bi bi-file-text me-2"></i>Contenus Associés ({{ $contenus->total() }})</h6>
-                            <a href="{{ route('contenus.create') }}?langue={{ $langue->id_langue }}" class="btn btn-sm btn-primary">
+                            <a href="{{ route('admin.contenus.create') }}?langue={{ $langue->id_langue }}" class="btn btn-sm btn-primary">
                                 <i class="bi bi-plus-circle me-1"></i> Ajouter un contenu
                             </a>
                         </div>
@@ -168,8 +168,8 @@
                                                 <strong>{{ Str::limit($contenu->titre, 40) }}</strong>
                                             </td>
                                             <td>
-                                                @if($contenu->type_contenu)
-                                                    <span class="badge bg-secondary">{{ $contenu->type_contenu->nom }}</span>
+                                                @if($contenu->typeContenu)
+                                                    <span class="badge bg-secondary">{{ $contenu->typeContenu->nom }}</span>
                                                 @endif
                                             </td>
                                             <td>
@@ -190,12 +190,12 @@
                                             </td>
                                             <td>
                                                 <div class="action-buttons-langues">
-                                                    <a href="{{ route('contenus.show', $contenu->id_contenu) }}" 
+                                                    <a href="{{ route('admin.contenus.show', $contenu->id_contenu) }}" 
                                                        class="action-btn-langue action-btn-info-langue" 
                                                        title="Voir">
                                                         <i class="bi bi-eye"></i>
                                                     </a>
-                                                    <a href="{{ route('contenus.edit', $contenu->id_contenu) }}" 
+                                                    <a href="{{ route('admin.contenus.edit', $contenu->id_contenu) }}" 
                                                        class="action-btn-langue action-btn-warning-langue" 
                                                        title="Modifier">
                                                         <i class="bi bi-pencil"></i>
@@ -219,7 +219,7 @@
                             <div class="text-center py-4">
                                 <i class="bi bi-file-text display-4 text-muted mb-3"></i>
                                 <p class="text-muted">Aucun contenu associé à cette langue pour le moment.</p>
-                                <a href="{{ route('contenus.create') }}?langue={{ $langue->id_langue }}" class="btn btn-primary">
+                                <a href="{{ route('admin.contenus.create') }}?langue={{ $langue->id_langue }}" class="btn btn-primary">
                                     <i class="bi bi-plus-circle me-2"></i> Créer le premier contenu
                                 </a>
                             </div>

@@ -26,7 +26,7 @@
                             </div>
                         </div>
                         <div>
-                            <a href="{{ route('contenus.create') }}" class="btn btn-primary btn-sm d-flex align-items-center">
+                            <a href="{{ route('admin.contenus.create') }}" class="btn btn-primary btn-sm d-flex align-items-center">
                                 <i class="bi bi-plus-circle me-2"></i>
                                 <span>Nouveau Contenu</span>
                             </a>
@@ -163,7 +163,7 @@
                                 <tr>
                                     <td>
                                         <span class="badge bg-dark rounded-pill px-3 py-2">
-                                            #{{ str_pad($contenu->id_contenu, 3, '0', STR_PAD_LEFT) }}
+                                            {{ str_pad($contenu->id_contenu, 3, '0', STR_PAD_LEFT) }}
                                         </span>
                                     </td>
                                     <td>

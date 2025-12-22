@@ -26,7 +26,7 @@
                             </div>
                         </div>
                         <div>
-                            <a href="{{ route('langues.index') }}" class="btn btn-outline-light btn-sm">
+                            <a href="{{ route('admin.langues.index') }}" class="btn btn-outline-light btn-sm">
                                 <i class="bi bi-arrow-left me-2"></i> Retour
                             </a>
                         </div>
@@ -36,7 +36,7 @@
                 <!-- Formulaire -->
                 <div class="card-body p-4">
                     <div class="form-card-langue">
-                        <form action="{{ route('langues.store') }}" method="POST">
+                        <form action="{{ route('admin.langues.store') }}" method="POST">
                             @csrf
 
                             <!-- Flash messages -->
@@ -113,7 +113,7 @@
                                             </button>
                                         </div>
                                         <div class="d-flex gap-2">
-                                            <a href="{{ route('langues.index') }}" class="btn btn-outline-secondary">
+                                            <a href="{{ route('admin.langues.index') }}" class="btn btn-outline-secondary">
                                                 <i class="bi bi-x-circle me-2"></i> Annuler
                                             </a>
                                             <button type="submit" class="btn btn-langue-primary">

@@ -48,7 +48,7 @@ class LangueController extends Controller
         try {
             Langue::create($data);
             
-            return redirect()->route('langues.index')
+            return redirect()->route('admin.langues.index')
                              ->with('success', 'Langue créée avec succès.');
         } catch (\Exception $e) {
             Log::error('Erreur création langue: ' . $e->getMessage());
@@ -63,16 +63,13 @@ class LangueController extends Controller
      */
     public function show(Langue $langue)
     {
-        $contenus = $langue->contenus()
-                          ->with(['region', 'type_contenu', 'auteur'])
-                          ->orderBy('id_contenu', 'desc')
-                          ->paginate(10);
-        
-        // Note: 'media' retiré car la table media n'a plus de colonne id_langue
+        // Chargement des compteurs
         $langue->loadCount(['contenus', 'users']);
-        
-        // Vous pouvez aussi utiliser la méthode custom (mais elle essaie aussi de charger media_count)
-        // $langue->loadAllCounts();
+
+        $contenus = $langue->contenus()
+                           ->with(['region', 'typeContenu', 'auteur'])
+                           ->orderBy('id_contenu', 'desc')
+                           ->paginate(10);
         
         return view('langues.show', compact('langue', 'contenus'));
     }
@@ -104,7 +101,7 @@ class LangueController extends Controller
         try {
             $langue->update($data);
             
-            return redirect()->route('langues.index')
+            return redirect()->route('admin.langues.index')
                              ->with('success', 'Langue mise à jour avec succès.');
         } catch (\Exception $e) {
             Log::error('Erreur mise à jour langue: ' . $e->getMessage());
@@ -122,25 +119,25 @@ class LangueController extends Controller
         try {
             // Vérifier si des contenus utilisent cette langue
             if ($langue->contenus()->exists()) {
-                return redirect()->route('langues.index')
+                return redirect()->route('admin.langues.index')
                                  ->with('error', 'Impossible de supprimer : cette langue est utilisée par ' . $langue->contenus()->count() . ' contenu(s).');
             }
             
             // Vérifier si des médias utilisent cette langue
             if ($langue->media()->exists()) {
-                return redirect()->route('langues.index')
+                return redirect()->route('admin.langues.index')
                                  ->with('error', 'Impossible de supprimer : cette langue est utilisée par ' . $langue->media()->count() . ' média(s).');
             }
             
             // Vérifier si des utilisateurs utilisent cette langue (maintenant possible)
             if ($langue->users()->exists()) {
-                return redirect()->route('langues.index')
+                return redirect()->route('admin.langues.index')
                                  ->with('error', 'Impossible de supprimer : cette langue est utilisée par ' . $langue->users()->count() . ' utilisateur(s).');
             }
             
             $langue->delete();
             
-            return redirect()->route('langues.index')
+            return redirect()->route('admin.langues.index')
                              ->with('success', 'Langue supprimée avec succès.');
         } catch (\Exception $e) {
             Log::error('Erreur suppression langue: ' . $e->getMessage());

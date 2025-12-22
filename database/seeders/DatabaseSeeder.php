@@ -16,39 +16,51 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'test@example.com'],
+            [
+                'name' => 'Test User',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+            ]
+        );
 
         // Create Admin user
-        User::create([
-            'name' => 'Admin',
-            'email' => 'maurice.comlan@uac.bj',
-            'password' => Hash::make('Eneam123'),
-        ]);
+        User::updateOrCreate(
+            ['email' => 'maurice.comlan@uac.bj'],
+            [
+                'name' => 'M. Maurice COMLAN',
+                'password' => 'Eneam123',
+                'role' => 'admin',
+                'email_verified_at' => now(),
+            ]
+        );
 
         // Create Manager user
-        User::create([
-            'name' => 'Manager',
-            'email' => 'arnaudkpodji@gmail.com',
-            'password' => Hash::make('Aristide229'),
-        ]);
+        User::updateOrCreate(
+            ['email' => 'arnaudkpodji@gmail.com'],
+            [
+                'name' => 'Arnaud KPODJI',
+                'password' => 'Eneam123',
+                'role' => 'admin',
+                'email_verified_at' => now(),
+            ]
+        );
 
         $this->call([
             RegionSeeder::class,
+            LangueSeeder::class,
             TypeContenuSeeder::class,
             ContenuSeeder::class,
             CommentaireSeeder::class,
             MediaSeeder::class,
-            LangueSeeder::class,
-            ParlerSeeder::class,
-            CacheSeeder::class,
-            CacheLockSeeder::class,
-            JobSeeder::class,
-            JobBatchSeeder::class,
+            // ParlerSeeder::class,
+            // CacheSeeder::class,
+            // CacheLockSeeder::class,
+            // JobSeeder::class,
+            // JobBatchSeeder::class,
             TypeMediaSeeder::class,
         ]);
     }

@@ -418,8 +418,46 @@
                 grid-template-columns: 1fr;
             }
             .hero h1 {
-                font-size: 3rem;
+                font-size: 2.5rem;
             }
+            .hero p {
+                font-size: 1.1rem;
+            }
+            header {
+                padding: 10px 20px;
+            }
+            .nav-buttons {
+                display: none;
+            }
+            .logo-text {
+                font-size: 18px;
+            }
+            .mobile-menu-btn {
+                display: block !important;
+                background: none;
+                border: none;
+                font-size: 24px;
+                color: var(--primary);
+                cursor: pointer;
+            }
+        }
+
+        .mobile-nav {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 20px;
+            box-shadow: var(--shadow-md);
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 999;
+        }
+
+        .mobile-nav.active {
+            display: flex;
         }
     </style>
 </head>
@@ -428,7 +466,6 @@
     <!-- Header -->
     <header>
         <div class="logo-container">
-            <!-- Logos conservés mais stylisés -->
             <img src="{{ asset('admin/img/Benin.png') }}" alt="Benin Logo" class="logo-img">
             <div class="logo-text">CULTURE <span>BENIN</span></div>
         </div>
@@ -436,7 +473,23 @@
             <a href="{{ route('login') }}" class="btn btn-outline"><i class="bi bi-box-arrow-in-right"></i> Connexion</a>
             <a href="{{ route('register') }}" class="btn btn-filled"><i class="bi bi-person-plus"></i> S'inscrire</a>
         </nav>
+        <button class="mobile-menu-btn" style="display: none;" onclick="toggleMobileMenu()">
+            <i class="bi bi-list"></i>
+        </button>
     </header>
+
+    <!-- Mobile Nav -->
+    <div class="mobile-nav" id="mobileNav">
+        <a href="{{ route('login') }}" class="btn btn-outline" style="text-align: center;"><i class="bi bi-box-arrow-in-right"></i> Connexion</a>
+        <a href="{{ route('register') }}" class="btn btn-filled" style="text-align: center;"><i class="bi bi-person-plus"></i> S'inscrire</a>
+    </div>
+
+    <script>
+        function toggleMobileMenu() {
+            const nav = document.getElementById('mobileNav');
+            nav.classList.toggle('active');
+        }
+    </script>
 
     <!-- Hero Section -->
     <section class="hero">

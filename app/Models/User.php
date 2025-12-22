@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * Class User
@@ -31,7 +32,7 @@ use Illuminate\Support\Facades\Hash;
  */
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, HasFactory;
 
     protected $table = 'users';
 
@@ -57,7 +58,8 @@ class User extends Authenticatable
         'age',
         'role',
         'langue',
-        'id_langue'
+        'id_langue',
+        'profile_photo_path'
     ];
 
     // Valeurs par défaut
@@ -68,7 +70,9 @@ class User extends Authenticatable
 
     // Constantes pour les rôles
     const ROLE_ADMIN = 'admin';
+    const ROLE_MANAGER = 'manager';
     const ROLE_EDITEUR = 'editeur';
+    const ROLE_AUTEUR = 'auteur';
     const ROLE_VISITEUR = 'visiteur';
     
     // Constantes pour le sexe
@@ -108,7 +112,9 @@ class User extends Authenticatable
     {
         return match($this->role) {
             self::ROLE_ADMIN => 'Administrateur',
+            self::ROLE_MANAGER => 'Manager',
             self::ROLE_EDITEUR => 'Éditeur',
+            self::ROLE_AUTEUR => 'Auteur',
             self::ROLE_VISITEUR => 'Visiteur',
             default => 'Visiteur'
         };
@@ -241,7 +247,9 @@ class User extends Authenticatable
     {
         return [
             self::ROLE_ADMIN => 'Administrateur',
+            self::ROLE_MANAGER => 'Manager',
             self::ROLE_EDITEUR => 'Éditeur',
+            self::ROLE_AUTEUR => 'Auteur',
             self::ROLE_VISITEUR => 'Visiteur',
         ];
     }

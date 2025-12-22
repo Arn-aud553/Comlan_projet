@@ -1,0 +1,378 @@
+Array
+(
+    [timestamp] => 2025-12-18 15:10:47
+    [request_all] => Array
+        (
+            [_token] => QVmqNIHAZ4IwbVbYpM8nyrfPp0kHUI9kPYbaUFbA
+            [MAX_FILE_SIZE] => 10485760
+            [name] => M. Maurice COMLAN
+            [email] => maurice.comlan@uac.bj
+            [sexe] => M
+            [age] => 32
+            [langue] => fr
+            [current_password] => Eneam123
+            [password] => 
+            [password_confirmation] => 
+        )
+
+    [files_superglobal] => Array
+        (
+            [photo] => Array
+                (
+                    [name] => 
+                    [full_path] => 
+                    [type] => 
+                    [tmp_name] => 
+                    [error] => 4
+                    [size] => 0
+                )
+
+        )
+
+    [has_photo] => 
+    [validated] => Array
+        (
+            [name] => M. Maurice COMLAN
+            [email] => maurice.comlan@uac.bj
+            [sexe] => M
+            [age] => 32
+            [langue] => fr
+            [current_password] => Eneam123
+            [password] => 
+        )
+
+    [user_attributes] => Array
+        (
+            [id] => 1
+            [name] => M. Maurice COMLAN
+            [email] => maurice.comlan@uac.bj
+            [email_verified_at] => 2025-12-18 14:33:47
+            [password] => $2y$12$txwvDc5KEZFanW/cr/G6kuJADFh3YTyrajQR.o2s7O8ilYfSH30N6
+            [remember_token] => 
+            [created_at] => 2025-12-18 12:46:31
+            [updated_at] => 2025-12-18 15:06:32
+            [role] => admin
+            [id_langue] => 
+            [langue] => fr
+            [nom_complet] => 
+            [sexe] => M
+            [age] => 32
+        )
+
+)
+
+
+Array
+(
+    [timestamp] => 2025-12-18 15:10:47
+    [request_all] => Array
+        (
+            [_token] => QVmqNIHAZ4IwbVbYpM8nyrfPp0kHUI9kPYbaUFbA
+            [MAX_FILE_SIZE] => 10485760
+            [name] => M. Maurice COMLAN
+            [email] => maurice.comlan@uac.bj
+            [sexe] => M
+            [age] => 32
+            [langue] => fr
+            [current_password] => Eneam123
+            [password] => 
+            [password_confirmation] => 
+        )
+
+    [files_superglobal] => Array
+        (
+            [photo] => Array
+                (
+                    [name] => 
+                    [full_path] => 
+                    [type] => 
+                    [tmp_name] => 
+                    [error] => 4
+                    [size] => 0
+                )
+
+        )
+
+    [has_photo] => 
+    [validated] => Array
+        (
+            [name] => M. Maurice COMLAN
+            [email] => maurice.comlan@uac.bj
+            [sexe] => M
+            [age] => 32
+            [langue] => fr
+            [current_password] => Eneam123
+            [password] => 
+        )
+
+    [user_attributes] => Array
+        (
+            [id] => 1
+            [name] => M. Maurice COMLAN
+            [email] => maurice.comlan@uac.bj
+            [email_verified_at] => 2025-12-18 14:33:47
+            [password] => $2y$12$txwvDc5KEZFanW/cr/G6kuJADFh3YTyrajQR.o2s7O8ilYfSH30N6
+            [remember_token] => 
+            [created_at] => 2025-12-18 12:46:31
+            [updated_at] => 2025-12-18 15:06:32
+            [role] => admin
+            [id_langue] => 
+            [langue] => fr
+            [nom_complet] => 
+            [sexe] => M
+            [age] => 32
+        )
+
+    [saved_status] => 1
+    [user_after_save] => Array
+        (
+            [id] => 1
+            [name] => M. Maurice COMLAN
+            [email] => maurice.comlan@uac.bj
+            [email_verified_at] => 2025-12-18T14:33:47.000000Z
+            [created_at] => 2025-12-18T12:46:31.000000Z
+            [updated_at] => 2025-12-18T15:10:47.000000Z
+            [role] => admin
+            [id_langue] => 
+            [langue] => fr
+            [nom_complet] => M. Maurice COMLAN
+            [sexe] => M
+            [age] => 32
+        )
+
+)
+
+
+Array
+(
+    [timestamp] => 2025-12-18 21:45:40
+    [request_all] => Array
+        (
+            [_token] => YIt4prVOqMpzOJs1bqNI0jK7IQ87BxzbATMnA488
+            [MAX_FILE_SIZE] => 10485760
+            [name] => SOLO Armand
+            [email] => armand@gmail.com
+            [sexe] => M
+            [age] => 22
+            [langue] => fr
+            [current_password] => ARISTIDE229
+            [password] => 
+            [password_confirmation] => 
+            [photo] => Illuminate\Http\UploadedFile Object
+                (
+                    [originalName:Symfony\Component\HttpFoundation\File\UploadedFile:private] => eglise-incroyable-avec-azulejo-portugais-a-valega-owar-portugal-maycd0.jpg
+                    [mimeType:Symfony\Component\HttpFoundation\File\UploadedFile:private] => image/jpeg
+                    [error:Symfony\Component\HttpFoundation\File\UploadedFile:private] => 0
+                    [originalPath:Symfony\Component\HttpFoundation\File\UploadedFile:private] => eglise-incroyable-avec-azulejo-portugais-a-valega-owar-portugal-maycd0.jpg
+                    [test:Symfony\Component\HttpFoundation\File\UploadedFile:private] => 
+                    [hashName:protected] => 
+                    [pathName:SplFileInfo:private] => C:\xampp\tmp\php1CDD.tmp
+                    [fileName:SplFileInfo:private] => php1CDD.tmp
+                )
+
+        )
+
+    [files_superglobal] => Array
+        (
+            [photo] => Array
+                (
+                    [name] => eglise-incroyable-avec-azulejo-portugais-a-valega-owar-portugal-maycd0.jpg
+                    [full_path] => eglise-incroyable-avec-azulejo-portugais-a-valega-owar-portugal-maycd0.jpg
+                    [type] => image/jpeg
+                    [tmp_name] => C:\xampp\tmp\php1CDD.tmp
+                    [error] => 0
+                    [size] => 248104
+                )
+
+        )
+
+    [has_photo] => 1
+    [validated] => Array
+        (
+            [name] => SOLO Armand
+            [email] => armand@gmail.com
+            [sexe] => M
+            [age] => 22
+            [langue] => fr
+            [photo] => Illuminate\Http\UploadedFile Object
+                (
+                    [originalName:Symfony\Component\HttpFoundation\File\UploadedFile:private] => eglise-incroyable-avec-azulejo-portugais-a-valega-owar-portugal-maycd0.jpg
+                    [mimeType:Symfony\Component\HttpFoundation\File\UploadedFile:private] => image/jpeg
+                    [error:Symfony\Component\HttpFoundation\File\UploadedFile:private] => 0
+                    [originalPath:Symfony\Component\HttpFoundation\File\UploadedFile:private] => eglise-incroyable-avec-azulejo-portugais-a-valega-owar-portugal-maycd0.jpg
+                    [test:Symfony\Component\HttpFoundation\File\UploadedFile:private] => 
+                    [hashName:protected] => 
+                    [pathName:SplFileInfo:private] => C:\xampp\tmp\php1CDD.tmp
+                    [fileName:SplFileInfo:private] => php1CDD.tmp
+                )
+
+            [current_password] => ARISTIDE229
+            [password] => 
+        )
+
+    [user_attributes] => Array
+        (
+            [id] => 111
+            [name] => SOLO Armand
+            [email] => armand@gmail.com
+            [email_verified_at] => 
+            [password] => $2y$12$EWGR3nyebRm4rwxHdZiRBelWB7K/XOe3L0/HcAgRov4IbeAV3iTR6
+            [remember_token] => 
+            [created_at] => 2025-12-18 16:16:51
+            [updated_at] => 2025-12-18 16:16:51
+            [role] => visiteur
+            [id_langue] => 
+            [langue] => fr
+            [nom_complet] => 
+            [sexe] => M
+            [age] => 22
+        )
+
+)
+
+
+Array
+(
+    [timestamp] => 2025-12-19 22:22:36
+    [request_all] => Array
+        (
+            [_token] => 4KlU5GHnSUlYoRGH6EInROQN6G6dYLARu2ooiIQT
+            [MAX_FILE_SIZE] => 10485760
+            [name] => M. Maurice COMLAN
+            [email] => maurice.comlan@uac.bj
+            [sexe] => M
+            [age] => 44
+            [langue] => fr
+            [current_password] => Eneam123
+            [password] => 
+            [password_confirmation] => 
+        )
+
+    [files_superglobal] => Array
+        (
+            [photo] => Array
+                (
+                    [name] => 
+                    [full_path] => 
+                    [type] => 
+                    [tmp_name] => 
+                    [error] => 4
+                    [size] => 0
+                )
+
+        )
+
+    [has_photo] => 
+    [validated] => Array
+        (
+            [name] => M. Maurice COMLAN
+            [email] => maurice.comlan@uac.bj
+            [sexe] => M
+            [age] => 44
+            [langue] => fr
+            [current_password] => Eneam123
+            [password] => 
+        )
+
+    [user_attributes] => Array
+        (
+            [id] => 1
+            [name] => M. Maurice COMLAN
+            [email] => maurice.comlan@uac.bj
+            [email_verified_at] => 2025-12-18 14:33:47
+            [password] => $2y$12$txwvDc5KEZFanW/cr/G6kuJADFh3YTyrajQR.o2s7O8ilYfSH30N6
+            [remember_token] => 
+            [created_at] => 2025-12-18 12:46:31
+            [updated_at] => 2025-12-18 15:10:47
+            [role] => admin
+            [id_langue] => 
+            [langue] => fr
+            [nom_complet] => 
+            [sexe] => M
+            [age] => 44
+        )
+
+)
+
+
+Array
+(
+    [timestamp] => 2025-12-19 22:22:36
+    [request_all] => Array
+        (
+            [_token] => 4KlU5GHnSUlYoRGH6EInROQN6G6dYLARu2ooiIQT
+            [MAX_FILE_SIZE] => 10485760
+            [name] => M. Maurice COMLAN
+            [email] => maurice.comlan@uac.bj
+            [sexe] => M
+            [age] => 44
+            [langue] => fr
+            [current_password] => Eneam123
+            [password] => 
+            [password_confirmation] => 
+        )
+
+    [files_superglobal] => Array
+        (
+            [photo] => Array
+                (
+                    [name] => 
+                    [full_path] => 
+                    [type] => 
+                    [tmp_name] => 
+                    [error] => 4
+                    [size] => 0
+                )
+
+        )
+
+    [has_photo] => 
+    [validated] => Array
+        (
+            [name] => M. Maurice COMLAN
+            [email] => maurice.comlan@uac.bj
+            [sexe] => M
+            [age] => 44
+            [langue] => fr
+            [current_password] => Eneam123
+            [password] => 
+        )
+
+    [user_attributes] => Array
+        (
+            [id] => 1
+            [name] => M. Maurice COMLAN
+            [email] => maurice.comlan@uac.bj
+            [email_verified_at] => 2025-12-18 14:33:47
+            [password] => $2y$12$txwvDc5KEZFanW/cr/G6kuJADFh3YTyrajQR.o2s7O8ilYfSH30N6
+            [remember_token] => 
+            [created_at] => 2025-12-18 12:46:31
+            [updated_at] => 2025-12-18 15:10:47
+            [role] => admin
+            [id_langue] => 
+            [langue] => fr
+            [nom_complet] => 
+            [sexe] => M
+            [age] => 44
+        )
+
+    [saved_status] => 1
+    [user_after_save] => Array
+        (
+            [id] => 1
+            [name] => M. Maurice COMLAN
+            [email] => maurice.comlan@uac.bj
+            [email_verified_at] => 2025-12-18T14:33:47.000000Z
+            [created_at] => 2025-12-18T12:46:31.000000Z
+            [updated_at] => 2025-12-19T22:22:36.000000Z
+            [role] => admin
+            [id_langue] => 
+            [langue] => fr
+            [nom_complet] => M. Maurice COMLAN
+            [sexe] => M
+            [age] => 44
+        )
+
+)
+
+

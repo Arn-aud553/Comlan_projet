@@ -190,6 +190,9 @@
         
         /* Responsive */
         @media (max-width: 768px) {
+            .d-none-mobile {
+                display: none !important;
+            }
             .sector-header {
                 flex-direction: column;
                 padding: 15px 20px;
@@ -251,7 +254,7 @@
             <img src="{{ asset('admin/img/CULTURE.png') }}" alt="Culture Bénin">
         </div>
         <h1 class="page-title">@yield('page-title')</h1>
-        <div class="logo">
+        <div class="logo d-none-mobile">
             <img src="{{ asset('admin/img/CULTURE.png') }}" alt="Culture Bénin">
         </div>
     </header>

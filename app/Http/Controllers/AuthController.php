@@ -23,7 +23,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('/redirect');
+            return redirect()->route('redirect');
         }
 
         throw ValidationException::withMessages([
@@ -38,7 +38,22 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        // Implémenter la création d'utilisateur ici
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $user = \App\Models\User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $request->password, // Mutator handles hashing
+            'role' => \App\Models\User::ROLE_VISITEUR,
+        ]);
+
+        event(new \Illuminate\Auth\Events\Registered($user));
+
+        return redirect()->route('login')->with('success', 'Votre compte a été créé avec succès ! Vous pouvez maintenant vous connecter.');
     }
 
     public function logout(Request $request)
@@ -52,7 +67,7 @@ class AuthController extends Controller
     public function redirectToDashboard()
     {
         $user = Auth::user();
-        if ($user->role === 'admin') {
+        if ($user && $user->estAdmin()) {
             return redirect()->route('admin.dashboard');
         }
         return redirect()->route('client.dashboard');

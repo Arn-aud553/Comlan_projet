@@ -60,8 +60,8 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if($contenu->type_contenu)
-                                            <span class="badge bg-secondary">{{ $contenu->type_contenu->nom ?? 'N/A' }}</span>
+                                        @if($contenu->typeContenu)
+                                            <span class="badge bg-secondary">{{ $contenu->typeContenu->nom ?? 'N/A' }}</span>
                                         @else
                                             <span class="badge bg-secondary">N/A</span>
                                         @endif

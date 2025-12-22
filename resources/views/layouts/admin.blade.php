@@ -15,6 +15,11 @@
       name="description"
       content="Plateforme de gestion du patrimoine culturel et linguistique béninois"
     />
+    <!--
+      - [x] **Vues Blade**: Correction définitive des noms de routes (ajout du préfixe `admin.`) dans les formulaires de création des régions et des langues.
+      - [x] **Localisation des Assets**: Téléchargement et hébergement local de Bootstrap, jQuery, DataTables et OverlayScrollbars pour éviter les blocages de "Tracking Prevention" des navigateurs.
+- [x] **Flux d'Authentification**: Implémentation de la logique de création d'utilisateur dans `register` et correction de la redirection vers les tableaux de bord client/admin.
+    -->
     <meta
       name="keywords"
       content="culture bénin, patrimoine, langues, régions, contenus, administration"
@@ -39,8 +44,7 @@
     <!--begin::Third Party Plugin(OverlayScrollbars)-->
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"
-      crossorigin="anonymous"
+      href="{{ asset('vendor/overlayscrollbars/overlayscrollbars.min.css') }}"
     />
     <!--end::Third Party Plugin(OverlayScrollbars)-->
     <!--begin::Third Party Plugin(Bootstrap Icons)-->
@@ -69,12 +73,12 @@
     />
     
     <!-- ========== DATATABLES CSS ========== -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.7.0/css/select.bootstrap5.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/searchbuilder/1.5.0/css/searchBuilder.bootstrap5.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/datetime/1.5.1/css/dataTables.dateTime.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendor/datatables/css/dataTables.bootstrap5.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendor/datatables/css/responsive.bootstrap5.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendor/datatables/css/buttons.bootstrap5.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendor/datatables/css/select.bootstrap5.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendor/datatables/css/searchBuilder.bootstrap5.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('vendor/datatables/css/dataTables.dateTime.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin-theme.css') }}">
     @stack('styles')
     
@@ -157,6 +161,7 @@
       }
       
       .dt-buttons {
+        display: none !important; /* On utilise nos propres boutons */
         margin-bottom: 10px;
       }
       
@@ -497,8 +502,13 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                     <li>
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" href="{{ route('admin.profile') }}">
                           <i class="bi bi-person me-2"></i> Mon profil
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ route('client.dashboard') }}">
+                          <i class="bi bi-person-workspace me-2"></i> Espace utilisateur
                         </a>
                     </li>
                     <li><hr class="dropdown-divider"></li>
@@ -655,7 +665,7 @@
               
               <!-- Types de contenus -->
               <li class="nav-item {{ $isTypeContenus ? 'menu-open' : '' }}">
-                <a href="{{ route('admin.types-contenu.index') }}" class="nav-link {{ $isTypeContenus ? 'active' : '' }}">
+                <a href="{{ route('admin.type_contenus.index') }}" class="nav-link {{ $isTypeContenus ? 'active' : '' }}">
                   <i class="nav-icon bi bi-tags"></i>
                   <p>Types de contenus</p>
                 </a>
@@ -744,46 +754,46 @@
     
     <!-- ========== DATATABLES SCRIPTS ========== -->
     <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="{{ asset('vendor/jquery/jquery-3.7.0.min.js') }}"></script>
     
     <!-- Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     
     <!-- AdminLTE -->
     <script src="{{ asset('admin/js/adminlte.js') }}"></script>
     
     <!-- OverlayScrollbars -->
-    <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js"></script>
+    <script src="{{ asset('vendor/overlayscrollbars/overlayscrollbars.browser.es6.min.js') }}"></script>
     
     <!-- DataTables Core -->
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-    
-    <!-- DataTables Extensions -->
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.colVis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
     
     <!-- DataTables Responsive -->
-    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+    <script src="{{ asset('vendor/datatables/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables/js/responsive.bootstrap5.min.js') }}"></script>
     
     <!-- DataTables Select -->
-    <script src="https://cdn.datatables.net/select/1.7.0/js/dataTables.select.min.js"></script>
+    <script src="{{ asset('vendor/datatables/js/dataTables.select.min.js') }}"></script>
     
     <!-- Export Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="{{ asset('vendor/jszip/jszip.min.js') }}"></script>
+    <script src="{{ asset('vendor/pdfmake/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('vendor/pdfmake/vfs_fonts.js') }}"></script>
     
     <!-- SearchBuilder -->
-    <script src="https://cdn.datatables.net/searchbuilder/1.5.0/js/dataTables.searchBuilder.min.js"></script>
-    <script src="https://cdn.datatables.net/searchbuilder/1.5.0/js/searchBuilder.bootstrap5.min.js"></script>
+    <script src="{{ asset('vendor/datatables/js/dataTables.searchBuilder.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables/js/searchBuilder.bootstrap5.min.js') }}"></script>
     
     <!-- DateTime -->
-    <script src="https://cdn.datatables.net/datetime/1.5.1/js/dataTables.dateTime.min.js"></script>
+    <script src="{{ asset('vendor/datatables/js/dataTables.dateTime.min.js') }}"></script>
     
     <script>
       // Configuration OverlayScrollbars
@@ -905,6 +915,20 @@
           searchBuilder: {
             columns: ':not(.no-search)'
           }
+          });
+
+        // Global export buttons binding
+        $(document).on('click', '.btn-export-copy', function() {
+            $('.datatable, .table-admin').DataTable().button('.buttons-copy').trigger();
+        });
+        $(document).on('click', '.btn-export-excel', function() {
+            $('.datatable, .table-admin').DataTable().button('.buttons-excel').trigger();
+        });
+        $(document).on('click', '.btn-export-pdf', function() {
+            $('.datatable, .table-admin').DataTable().button('.buttons-pdf').trigger();
+        });
+        $(document).on('click', '.btn-export-print', function() {
+            $('.datatable, .table-admin').DataTable().button('.buttons-print').trigger();
         });
       });
       

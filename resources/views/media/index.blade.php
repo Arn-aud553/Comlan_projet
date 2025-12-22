@@ -8,7 +8,7 @@
                 <div class="card-header">
                     <h3 class="card-title">Gestion des Médias</h3>
                     <div class="card-tools">
-                        <a href="{{ route('media.create') }}" class="btn btn-primary btn-sm">
+                        <a href="{{ route('admin.media.create') }}" class="btn btn-primary btn-sm">
                             <i class="bi bi-plus-circle"></i> Nouveau Média
                         </a>
                     </div>
@@ -66,7 +66,7 @@
                                         <td>{{ $item->taille_formattee ?? 'N/A' }}</td>
                                         <td>
                                             @if($item->contenu)
-                                                <a href="{{ route('contenus.show', $item->id_contenu) }}" class="text-primary">
+                                                <a href="{{ route('admin.contenus.show', $item->id_contenu) }}" class="text-primary">
                                                     {{ Str::limit($item->contenu->titre ?? 'N/A', 25) }}
                                                 </a>
                                             @else
@@ -80,13 +80,13 @@
                                                 <a href="{{ $item->url }}" target="_blank" class="btn btn-info" title="Voir">
                                                     <i class="bi bi-eye"></i>
                                                 </a>
-                                                <a href="{{ route('media.show', ['medium' => $item->id_media]) }}" class="btn btn-primary" title="Détails">
+                                                <a href="{{ route('admin.media.show', ['medium' => $item->id_media]) }}" class="btn btn-primary" title="Détails">
                                                     <i class="bi bi-info-circle"></i>
                                                 </a>
-                                                <a href="{{ route('media.edit', ['medium' => $item->id_media]) }}" class="btn btn-warning" title="Modifier">
+                                                <a href="{{ route('admin.media.edit', ['medium' => $item->id_media]) }}" class="btn btn-warning" title="Modifier">
                                                     <i class="bi bi-pencil"></i>
                                                 </a>
-                                                <form action="{{ route('media.destroy', ['medium' => $item->id_media]) }}" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce média ?');">
+                                                <form action="{{ route('admin.media.destroy', ['medium' => $item->id_media]) }}" method="POST" style="display: inline;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce média ?');">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger" title="Supprimer">

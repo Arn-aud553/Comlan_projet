@@ -3,16 +3,16 @@
 @section('title', 'Créer un Type de Contenu')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/type_contenus.css') }}">
+<link rel="stylesheet" href="{{ asset('css/admin-table.css') }}">
 @endpush
 
 @section('content')
-<div class="container-fluid py-4 types-contenus-container">
+<div class="container-fluid py-4">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card shadow-lg border-0">
                 <!-- En-tête avec gradient -->
-                <div class="card-header card-header-gradient-types-contenus py-3">
+                <div class="card-header card-header-gradient py-3">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex align-items-center">
                             <div class="icon-wrapper me-3">
@@ -26,7 +26,7 @@
                             </div>
                         </div>
                         <div>
-                            <a href="{{ route('type_contenus.index') }}" class="btn btn-outline-light btn-sm">
+                            <a href="{{ route('admin.type_contenus.index') }}" class="btn btn-outline-light btn-sm">
                                 <i class="bi bi-arrow-left me-2"></i> Retour
                             </a>
                         </div>
@@ -36,7 +36,7 @@
                 <!-- Formulaire -->
                 <div class="card-body p-4">
                     <div class="form-card-type-contenu">
-                        <form action="{{ route('type_contenus.store') }}" method="POST">
+                        <form action="{{ route('admin.type_contenus.store') }}" method="POST">
                             @csrf
 
                             <!-- Flash messages -->
@@ -79,15 +79,15 @@
                                 <div class="col-12">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
-                                            <button type="reset" class="btn btn-type-contenu-secondary">
+                                            <button type="reset" class="btn btn-outline-secondary">
                                                 <i class="bi bi-arrow-clockwise me-2"></i> Réinitialiser
                                             </button>
                                         </div>
                                         <div class="d-flex gap-2">
-                                            <a href="{{ route('type_contenus.index') }}" class="btn btn-outline-secondary">
+                                            <a href="{{ route('admin.type_contenus.index') }}" class="btn btn-outline-secondary">
                                                 <i class="bi bi-x-circle me-2"></i> Annuler
                                             </a>
-                                            <button type="submit" class="btn btn-type-contenu-primary">
+                                            <button type="submit" class="btn btn-action-primary text-white">
                                                 <i class="bi bi-check-circle me-2"></i> Enregistrer
                                             </button>
                                         </div>

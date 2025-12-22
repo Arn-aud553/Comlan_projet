@@ -3,20 +3,20 @@
 @section('title', $typeContenu->nom)
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/type_contenus.css') }}">
+<link rel="stylesheet" href="{{ asset('css/admin-table.css') }}">
 @endpush
 
 @section('content')
-<div class="container-fluid py-4 types-contenus-container">
+<div class="container-fluid py-4">
     <div class="row">
         <div class="col-lg-8">
             <div class="card shadow-lg border-0 mb-4">
                 <!-- En-tête avec gradient -->
-                <div class="card-header card-header-gradient-types-contenus py-3">
+                <div class="card-header card-header-gradient py-3">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex align-items-center">
                             <div class="icon-wrapper me-3">
-                                <i class="bi bi-info-circle fs-3"></i>
+                                <i class="bi bi-tags fs-3"></i>
                             </div>
                             <div>
                                 <h5 class="card-title mb-0 fs-4">Détails du Type de Contenu</h5>
@@ -26,11 +26,11 @@
                             </div>
                         </div>
                         <div class="d-flex gap-2">
-                            <a href="{{ route('type_contenus.edit', $typeContenu->id_type_contenu) }}" 
+                            <a href="{{ route('admin.type_contenus.edit', $typeContenu->id_type_contenu) }}" 
                                class="btn btn-outline-light btn-sm">
                                 <i class="bi bi-pencil me-2"></i> Modifier
                             </a>
-                            <a href="{{ route('type_contenus.index') }}" class="btn btn-outline-light btn-sm">
+                            <a href="{{ route('admin.type_contenus.index') }}" class="btn btn-outline-light btn-sm">
                                 <i class="bi bi-arrow-left me-2"></i> Retour
                             </a>
                         </div>
@@ -41,10 +41,10 @@
                 <div class="card-body p-4">
                     <div class="row">
                         <div class="col-md-6 mb-4">
-                            <div class="info-card-type-contenu p-3 rounded">
+                            <div class="card border-0 shadow-sm p-3 rounded">
                                 <div class="d-flex align-items-center mb-3">
-                                    <div class="type-icon-large me-3">
-                                        <i class="bi bi-tag-fill fs-1 text-primary"></i>
+                                    <div class="me-3 text-primary">
+                                        <i class="bi bi-tag-fill fs-1"></i>
                                     </div>
                                     <div>
                                         <h4 class="mb-1">{{ $typeContenu->nom }}</h4>
@@ -54,24 +54,24 @@
                                     </div>
                                 </div>
                                 
-                                <div class="stats-type-contenu mt-4">
+                                <div class="mt-4">
                                     <div class="row text-center">
                                         <div class="col-6">
-                                            <div class="stat-item">
-                                                <div class="stat-number text-primary fs-3">
+                                            <div class="border rounded p-2">
+                                                <div class="text-primary fs-3 fw-bold">
                                                     {{ $typeContenu->contenus()->count() }}
                                                 </div>
-                                                <div class="stat-label text-muted">
+                                                <div class="text-muted small">
                                                     <i class="bi bi-file-text me-1"></i> Contenus
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-6">
-                                            <div class="stat-item">
-                                                <div class="stat-number text-success fs-3">
+                                            <div class="border rounded p-2">
+                                                <div class="text-success fs-3 fw-bold">
                                                     {{ $typeContenu->contenus()->where('statut', 1)->count() }}
                                                 </div>
-                                                <div class="stat-label text-muted">
+                                                <div class="text-muted small">
                                                     <i class="bi bi-check-circle me-1"></i> Actifs
                                                 </div>
                                             </div>
@@ -125,7 +125,7 @@
             </div>
         </div>
 
-        <div class="col-lg-4">
+    <div class="col-lg-4">
             <div class="card shadow-lg border-0 mb-4">
                 <div class="card-header bg-white border-0 py-3">
                     <h6 class="mb-0">
@@ -134,13 +134,13 @@
                 </div>
                 <div class="card-body">
                     <div class="d-grid gap-2">
-                        <a href="{{ route('type_contenus.edit', $typeContenu->id_type_contenu) }}" 
-                           class="btn btn-warning">
+                        <a href="{{ route('admin.type_contenus.edit', $typeContenu->id_type_contenu) }}" 
+                           class="btn btn-action-primary text-white">
                             <i class="bi bi-pencil-square me-2"></i> Modifier
                         </a>
                         
                         @if($typeContenu->contenus()->count() == 0)
-                        <form action="{{ route('type_contenus.destroy', $typeContenu->id_type_contenu) }}" 
+                        <form action="{{ route('admin.type_contenus.destroy', $typeContenu->id_type_contenu) }}" 
                               method="POST" 
                               onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce type de contenu ?')">
                             @csrf
@@ -150,12 +150,12 @@
                             </button>
                         </form>
                         @else
-                        <button class="btn btn-danger disabled" title="Impossible de supprimer un type utilisé">
+                        <button class="btn btn-danger disabled" title="Impossible de supprimer un type utilisé" disabled>
                             <i class="bi bi-trash me-2"></i> Supprimer (non disponible)
                         </button>
                         @endif
                         
-                        <a href="{{ route('type_contenus.create') }}" class="btn btn-primary">
+                        <a href="{{ route('admin.type_contenus.create') }}" class="btn btn-outline-primary">
                             <i class="bi bi-plus-circle me-2"></i> Nouveau Type
                         </a>
                     </div>
@@ -196,7 +196,7 @@
                             <tbody>
                                 @foreach($typeContenu->contenus()->latest()->take(10)->get() as $contenu)
                                 <tr>
-                                    <td class="text-muted">#{{ $contenu->id_contenu }}</td>
+                                    <td class="text-muted">{{ $contenu->id_contenu }}</td>
                                     <td>{{ Str::limit($contenu->titre, 50) }}</td>
                                     <td>
                                         @if($contenu->statut)
@@ -207,7 +207,7 @@
                                     </td>
                                     <td>{{ $contenu->created_at->format('d/m/Y') }}</td>
                                     <td>
-                                        <a href="{{ route('contenus.show', $contenu) }}" 
+                                        <a href="{{ route('admin.contenus.show', $contenu) }}" 
                                            class="btn btn-sm btn-outline-info" 
                                            title="Voir">
                                             <i class="bi bi-eye"></i>
@@ -238,7 +238,7 @@
                     <i class="bi bi-file-text display-1 text-muted mb-4"></i>
                     <h5 class="text-muted mb-3">Aucun contenu associé à ce type</h5>
                     <p class="text-muted mb-4">Ce type de contenu n'est pas encore utilisé.</p>
-                    <a href="{{ route('contenus.create') }}" class="btn btn-primary">
+                    <a href="{{ route('admin.contenus.create') }}" class="btn btn-primary">
                         <i class="bi bi-plus-circle me-2"></i> Créer un contenu
                     </a>
                 </div>

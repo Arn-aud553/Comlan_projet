@@ -7,222 +7,147 @@
 @endpush
 
 @section('content')
-<div class="container-fluid py-4 types-contenus-container">
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card shadow-lg border-0">
-                <!-- En-tête avec gradient -->
-                <div class="card-header card-header-gradient-types-contenus py-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center">
-                            <div class="icon-wrapper me-3">
-                                <i class="bi bi-tags fs-3"></i>
-                            </div>
-                            <div>
-                                <h5 class="card-title mb-0 fs-4">Gestion des Types de Contenu</h5>
-                                <p class="mb-0 opacity-75" style="font-size: 0.9rem;">
-                                    {{ $typesContenu->total() }} types de contenu au total
-                                </p>
-                            </div>
-                        </div>
-                        <div>
-                            <a href="{{ route('type_contenus.create') }}" class="btn btn-primary btn-sm d-flex align-items-center">
-                                <i class="bi bi-plus-circle me-2"></i>
-                                <span>Nouveau Type</span>
-                            </a>
-                        </div>
-                    </div>
+<div class="container-fluid py-4">
+    <!-- En-tête avec Actions Export -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-gray-800 search-filter-title">
+                <i class="bi bi-tags"></i> TYPES DE CONTENUS
+            </h1>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-export btn-export-copy"><i class="bi bi-clipboard"></i> Copier</button>
+            <button class="btn btn-export btn-export-excel"><i class="bi bi-file-earmark-excel"></i> Excel</button>
+            <button class="btn btn-export btn-export-pdf"><i class="bi bi-file-earmark-pdf"></i> PDF</button>
+            <button class="btn btn-export btn-export-print"><i class="bi bi-printer"></i> Imprimer</button>
+            <a href="{{ route('admin.type_contenus.create') }}" class="btn btn-primary d-flex align-items-center ms-3">
+                 <i class="bi bi-plus-circle me-2"></i> Nouveau
+            </a>
+        </div>
+    </div>
+
+    <!-- Carte Recherche & Filtres -->
+    <div class="search-filter-container">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label fw-bold text-uppercase small text-muted">Recherche</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+                    <input type="text" id="customSearch" class="form-control border-start-0 ps-0" placeholder="Nom ou ID...">
                 </div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-bold text-uppercase small text-muted">Contenus Associés</label>
+                <select id="customFilter" class="form-select">
+                    <option value="">Tous</option>
+                    <option value="avec">Avec contenus</option>
+                    <option value="sans">Sans contenu</option>
+                </select>
+            </div>
+        </div>
+    </div>
 
-                <!-- Corps de la carte -->
-                <div class="card-body p-4">
-                    <!-- Section Filtres - EXACTEMENT COMME COMMENTAIRE -->
-                    <div class="filtres-section-types-contenus mb-4">
-                        <div class="row align-items-end">
-                            <div class="col-md-8">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label for="filterTexte" class="form-label">
-                                            <i class="bi bi-search me-1"></i> Recherche
-                                        </label>
-                                        <div class="input-group input-group-sm">
-                                            <span class="input-group-text bg-light">
-                                                <i class="bi bi-search text-primary"></i>
-                                            </span>
-                                            <input type="text" id="filterTexte" class="form-control shadow-none" placeholder="Nom du type de contenu...">
-                                        </div>
+    <!-- Table -->
+    <div class="card shadow mb-4 border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table id="typesContenusTable" class="table table-admin table-hover mb-0 w-100">
+                    <thead class="bg-light">
+                        <tr>
+                            <th width="10%"># ID</th>
+                            <th width="40%">TYPE</th>
+                            <th width="20%">CONTENUS</th>
+                            <th width="15%">DATE CRÉATION</th>
+                            <th width="15%" class="text-end">ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($typesContenu as $type)
+                            <tr>
+                                <td>
+                                    <span class="badge-id">{{ str_pad($type->id_type_contenu, 3, '0', STR_PAD_LEFT) }}</span>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <span class="badge-code me-3">{{ strtoupper(substr($type->nom, 0, 2)) }}</span>
+                                        <span class="fw-bold text-dark">{{ $type->nom }}</span>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label for="filterStatut" class="form-label">
-                                            <i class="bi bi-funnel me-1"></i> Filtre
-                                        </label>
-                                        <select id="filterStatut" class="form-select shadow-none">
-                                            <option value="">Tous les types</option>
-                                            <option value="avec">Avec contenus</option>
-                                            <option value="sans">Sans contenu</option>
-                                        </select>
+                                </td>
+                                <td>
+                                    <span class="badge-count">
+                                        <i class="bi bi-file-text"></i> {{ $type->contenus_count }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-column text-muted small">
+                                        <span><i class="bi bi-calendar3 me-1"></i> {{ $type->created_at->format('d/m/Y') }}</span>
                                     </div>
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-4">
-                                <div class="d-flex justify-content-end gap-2">
-                                    <button id="resetFilters" class="btn btn-outline-secondary btn-sm d-flex align-items-center">
-                                        <i class="bi bi-arrow-clockwise me-2"></i>
-                                        Réinitialiser
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Table DataTable -->
-                    <div class="table-responsive">
-                        <table id="typesContenusTable" class="table table-types-contenus">
-                            <thead>
-                                <tr>
-                                    <th width="5%">
-                                        <div class="d-flex align-items-center">
-                                            <i class="bi bi-hash me-2"></i> ID
-                                        </div>
-                                    </th>
-                                    <th width="40%">
-                                        <div class="d-flex align-items-center">
-                                            <i class="bi bi-tag me-2"></i> Nom du Type
-                                        </div>
-                                    </th>
-                                    <th width="20%">
-                                        <div class="d-flex align-items-center">
-                                            <i class="bi bi-files me-2"></i> Contenus Associés
-                                        </div>
-                                    </th>
-                                    <th width="20%">
-                                        <div class="d-flex align-items-center">
-                                            <i class="bi bi-calendar me-2"></i> Date de Création
-                                        </div>
-                                    </th>
-                                    <th width="15%">
-                                        <div class="d-flex align-items-center">
-                                            <i class="bi bi-gear me-2"></i> Actions
-                                        </div>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($typesContenu as $type)
-                                <tr>
-                                    <td>
-                                        <span class="badge bg-dark rounded-pill px-3 py-2">
-                                            #{{ str_pad($type->id_type_contenu, 4, '0', STR_PAD_LEFT) }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="type-icon me-2">
-                                                <i class="bi bi-tag-fill text-primary"></i>
-                                            </div>
-                                            <div>
-                                                <strong class="d-block">{{ $type->nom }}</strong>
-                                                <small class="text-muted">ID: {{ $type->id_type_contenu }}</small>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td data-search="{{ $type->contenus_count }}">
-                                        @if($type->contenus_count > 0)
-                                            <span class="badge badge-type-contenu badge-contenus">
-                                                <i class="bi bi-file-text me-1"></i>
-                                                {{ $type->contenus_count }} contenu(s)
-                                            </span>
-                                            <button class="btn btn-sm btn-outline-info ms-2 btn-view-contenus" 
-                                                    data-id="{{ $type->id_type_contenu }}"
-                                                    data-nom="{{ $type->nom }}"
-                                                    title="Voir les contenus">
-                                                <i class="bi bi-eye"></i>
+                                </td>
+                                <td class="text-end">
+                                    <div class="action-btn-group">
+                                        <a href="{{ route('admin.type_contenus.show', $type->id_type_contenu) }}" 
+                                           class="btn-action btn-action-view" title="Voir">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a href="{{ route('admin.type_contenus.edit', $type->id_type_contenu) }}" 
+                                           class="btn-action btn-action-edit" title="Modifier">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <form action="{{ route('admin.type_contenus.destroy', $type->id_type_contenu) }}" 
+                                              method="POST" class="d-inline"
+                                              onsubmit="return confirm('Supprimer ce type ?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn-action btn-action-delete" title="Supprimer">
+                                                <i class="bi bi-trash"></i>
                                             </button>
-                                        @else
-                                            <span class="badge bg-secondary">Aucun contenu</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <div class="d-flex flex-column">
-                                            <span class="small">
-                                                <i class="bi bi-calendar3 me-1"></i>
-                                                {{ $type->created_at->format('d/m/Y') }}
-                                            </span>
-                                            <span class="text-muted smaller">
-                                                {{ $type->created_at->format('H:i') }}
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="action-buttons-types-contenus">
-                                            <a href="{{ route('type_contenus.show', $type->id_type_contenu) }}" 
-                                               class="action-btn-type-contenu action-btn-info-type-contenu" 
-                                               title="Voir les détails" 
-                                               data-bs-toggle="tooltip">
-                                                <i class="bi bi-eye"></i>
-                                            </a>
-                                            <a href="{{ route('type_contenus.edit', $type->id_type_contenu) }}" 
-                                               class="action-btn-type-contenu action-btn-warning-type-contenu" 
-                                               title="Modifier" 
-                                               data-bs-toggle="tooltip">
-                                                <i class="bi bi-pencil"></i>
-                                            </a>
-                                            <form action="{{ route('type_contenus.destroy', $type->id_type_contenu) }}" 
-                                                  method="POST" 
-                                                  class="d-inline"
-                                                  onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce type de contenu ?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" 
-                                                        class="action-btn-type-contenu action-btn-danger-type-contenu" 
-                                                        title="Supprimer" 
-                                                        data-bs-toggle="tooltip">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Modal pour voir les contenus -->
-<div class="modal fade" id="contenusModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header card-header-gradient-types-contenus">
-                <h5 class="modal-title text-white">
-                    <i class="bi bi-file-text me-2"></i>
-                    <span id="modalTitle">Contenus associés</span>
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body" id="modalContenusBody">
-                <!-- Contenu chargé via AJAX -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="bi bi-x-circle me-2"></i> Fermer
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
+
 @endsection
 
 @push('scripts')
-<!-- LE SCRIPT EXACTEMENT COMME COMMENTAIRE (voir ci-dessus) -->
 <script>
 $(document).ready(function() {
-    // ... (le script exact comme montré plus haut)
+    var table = $('#typesContenusTable').DataTable({
+        language: {
+            url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json"
+        },
+        dom: 'rtip', // Hide default search box
+        pageLength: 10,
+        columnDefs: [
+            { orderable: false, targets: 4 }
+        ]
+    });
+
+    // Custom Search
+    $('#customSearch').on('keyup', function() {
+        table.search(this.value).draw();
+    });
+
+    // Custom Filter
+    $('#customFilter').on('change', function() {
+        var val = this.value;
+        // Ceci est une simplification, pour un vrai filtre colonne, on ciblerait la colonne spécifique
+        // Ici on filtre globalement pour l'exemple, ou on implémente une regex sur la colonne contenus
+        if(val === 'avec') {
+             table.column(2).search('[1-9]', true, true).draw();
+        } else if(val === 'sans') {
+             table.column(2).search('0', true, true).draw(); // Cherche "0"
+        } else {
+             table.column(2).search('').draw();
+        }
+    });
 });
 </script>
 @endpush

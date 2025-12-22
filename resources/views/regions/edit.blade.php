@@ -3,7 +3,7 @@
 @section('title', 'Modifier la Région')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/regions.css') }}">
+<link rel="stylesheet" href="{{ asset('css/admin-table.css') }}">
 @endpush
 
 @section('content')
@@ -12,7 +12,7 @@
         <div class="col-md-8">
             <div class="card shadow-lg border-0">
                 <!-- En-tête avec gradient -->
-                <div class="card-header card-header-gradient-regions py-3">
+                <div class="card-header card-header-gradient py-3">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex align-items-center">
                             <div class="icon-wrapper me-3">
@@ -26,7 +26,7 @@
                             </div>
                         </div>
                         <div>
-                            <a href="{{ route('regions.show', $region->id_region) }}" class="btn btn-outline-light btn-sm">
+                            <a href="{{ route('admin.regions.show', $region->id_region) }}" class="btn btn-outline-light btn-sm">
                                 <i class="bi bi-eye me-2"></i> Voir
                             </a>
                         </div>
@@ -36,7 +36,7 @@
                 <!-- Formulaire -->
                 <div class="card-body p-4">
                     <div class="form-card-region">
-                        <form action="{{ route('regions.update', $region->id_region) }}" method="POST">
+                        <form action="{{ route('admin.regions.update', $region->id_region) }}" method="POST">
                             @csrf
                             @method('PUT')
 
@@ -90,15 +90,15 @@
                                 <div class="col-12">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
-                                            <a href="{{ route('regions.show', $region->id_region) }}" class="btn btn-region-secondary">
+                                            <a href="{{ route('admin.regions.show', $region->id_region) }}" class="btn btn-outline-danger">
                                                 <i class="bi bi-x-circle me-2"></i> Annuler
                                             </a>
                                         </div>
                                         <div class="d-flex gap-2">
-                                            <a href="{{ route('regions.index') }}" class="btn btn-outline-secondary">
+                                            <a href="{{ route('admin.regions.index') }}" class="btn btn-outline-secondary">
                                                 <i class="bi bi-arrow-left me-2"></i> Retour à la liste
                                             </a>
-                                            <button type="submit" class="btn btn-region-primary">
+                                            <button type="submit" class="btn btn-action-primary text-white">
                                                 <i class="bi bi-check-circle me-2"></i> Mettre à jour
                                             </button>
                                         </div>

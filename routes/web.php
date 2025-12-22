@@ -43,7 +43,7 @@ Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.post');
     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
-    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/register', [AuthController::class, 'register'])->name('register.post');
     Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('password.request');
     Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('password.email');
     Route::get('/reset-password/{token}', [AuthController::class, 'showResetPasswordForm'])->name('password.reset');
@@ -59,11 +59,12 @@ Route::middleware('auth')->group(function () {
 Route::get('/musique', [PublicController::class, 'musique'])->name('musique');
 Route::get('/danse', [PublicController::class, 'danse'])->name('danse');
 Route::get('/art', [PublicController::class, 'art'])->name('art');
-Route::get('/art-rue', [PublicController::class, 'art-rue'])->name('art-rue');
+Route::get('/art-rue', [PublicController::class, 'artRue'])->name('art-rue');
 Route::get('/histoire', [PublicController::class, 'histoire'])->name('histoire');
 Route::get('/gastronomie', [PublicController::class, 'gastronomie'])->name('gastronomie');
 Route::get('/mode', [PublicController::class, 'mode'])->name('mode');
 Route::get('/themes', [PublicController::class, 'themes'])->name('themes');
+Route::get('/theme/{slug}', [PublicController::class, 'themeDetail'])->name('theme.detail');
 
 // Routes accessibles après vérification d'email
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -100,6 +101,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::middleware(['auth', 'verified', 'check.admin'])->prefix('admin')->name('admin.')->group(function () {
     // Tableau de bord admin
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    
+    // Profil admin
+    Route::get('/profile', [AdminController::class, 'profile'])->name('profile');
     
     // Gestion des utilisateurs (admin)
     Route::prefix('users')->name('users.')->group(function () {
@@ -149,10 +153,10 @@ Route::middleware(['auth', 'verified', 'check.admin'])->prefix('admin')->name('a
         Route::get('/', [LangueController::class, 'index'])->name('index');
         Route::get('/create', [LangueController::class, 'create'])->name('create');
         Route::post('/', [LangueController::class, 'store'])->name('store');
-        Route::get('/{id}', [LangueController::class, 'show'])->name('show');
-        Route::get('/{id}/edit', [LangueController::class, 'edit'])->name('edit');
-        Route::put('/{id}', [LangueController::class, 'update'])->name('update');
-        Route::delete('/{id}', [LangueController::class, 'destroy'])->name('destroy');
+        Route::get('/{langue}', [LangueController::class, 'show'])->name('show');
+        Route::get('/{langue}/edit', [LangueController::class, 'edit'])->name('edit');
+        Route::put('/{langue}', [LangueController::class, 'update'])->name('update');
+        Route::delete('/{langue}', [LangueController::class, 'destroy'])->name('destroy');
     });
     
     // Gestion des régions (admin)
@@ -160,21 +164,21 @@ Route::middleware(['auth', 'verified', 'check.admin'])->prefix('admin')->name('a
         Route::get('/', [RegionController::class, 'index'])->name('index');
         Route::get('/create', [RegionController::class, 'create'])->name('create');
         Route::post('/', [RegionController::class, 'store'])->name('store');
-        Route::get('/{id}', [RegionController::class, 'show'])->name('show');
-        Route::get('/{id}/edit', [RegionController::class, 'edit'])->name('edit');
-        Route::put('/{id}', [RegionController::class, 'update'])->name('update');
-        Route::delete('/{id}', [RegionController::class, 'destroy'])->name('destroy');
+        Route::get('/{region}', [RegionController::class, 'show'])->name('show');
+        Route::get('/{region}/edit', [RegionController::class, 'edit'])->name('edit');
+        Route::put('/{region}', [RegionController::class, 'update'])->name('update');
+        Route::delete('/{region}', [RegionController::class, 'destroy'])->name('destroy');
     });
     
     // Gestion des types de contenu (admin)
-    Route::prefix('types-contenu')->name('types-contenu.')->group(function () {
+    Route::prefix('types-contenu')->name('type_contenus.')->group(function () {
         Route::get('/', [TypeContenuController::class, 'index'])->name('index');
         Route::get('/create', [TypeContenuController::class, 'create'])->name('create');
         Route::post('/', [TypeContenuController::class, 'store'])->name('store');
-        Route::get('/{id}', [TypeContenuController::class, 'show'])->name('show');
-        Route::get('/{id}/edit', [TypeContenuController::class, 'edit'])->name('edit');
-        Route::put('/{id}', [TypeContenuController::class, 'update'])->name('update');
-        Route::delete('/{id}', [TypeContenuController::class, 'destroy'])->name('destroy');
+        Route::get('/{typeContenu}', [TypeContenuController::class, 'show'])->name('show');
+        Route::get('/{typeContenu}/edit', [TypeContenuController::class, 'edit'])->name('edit');
+        Route::put('/{typeContenu}', [TypeContenuController::class, 'update'])->name('update');
+        Route::delete('/{typeContenu}', [TypeContenuController::class, 'destroy'])->name('destroy');
     });
     
     // Modération (admin)
@@ -243,6 +247,9 @@ Route::middleware(['auth', 'verified', 'check.client'])->prefix('client')->name(
     // Gestion des médias (client)
     Route::prefix('media')->name('media.')->group(function () {
         Route::get('/', [ClientDashboardController::class, 'mediaIndex'])->name('index');
+        Route::get('/video', [ClientDashboardController::class, 'mediaVideo'])->name('video');
+        Route::get('/audio', [ClientDashboardController::class, 'mediaAudio'])->name('audio');
+        Route::get('/reviews', [ClientDashboardController::class, 'mediaReviews'])->name('reviews');
         Route::get('/{id}', [ClientDashboardController::class, 'mediaDetail'])->name('detail');
         Route::post('/upload', [ClientDashboardController::class, 'uploadMedia'])->name('upload');
         
