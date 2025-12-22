@@ -39,20 +39,6 @@ Route::get('/', function () {
 Route::get('/redirect', [AuthController::class, 'redirectToDashboard'])->name('redirect');
 
 // Les routes d'authentification sont gérées par routes/auth.php
-// Route::middleware('guest')->group(function () {
-//     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-//     Route::post('/login', [AuthController::class, 'login'])->name('login.post');
-//     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
-//     Route::post('/register', [AuthController::class, 'register'])->name('register.post');
-//     Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('password.request');
-//     Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('password.email');
-//     Route::get('/reset-password/{token}', [AuthController::class, 'showResetPasswordForm'])->name('password.reset');
-//     Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
-// });
-
-// Route::middleware('auth')->group(function () {
-//     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-// });
 
 // Routes publiques pour les catégories culturelles
 Route::get('/musique', [PublicController::class, 'musique'])->name('musique');
@@ -352,42 +338,7 @@ Route::middleware(['auth', 'verified'])->prefix('api')->name('api.')->group(func
 });
 
 // Les routes de vérification d'email et de confirmation de mot de passe sont gérées par routes/auth.php
-// // Routes de vérification d'email (Laravel Fortify/Breeze)
-// Route::get('/email/verify', function () {
-//     return view('auth.verify-email');
-// })->middleware('auth')->name('verification.notice');
-// 
-// Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-//     $request->fulfill();
-//     return redirect()->intended('/redirect');
-// })->middleware(['auth', 'signed'])->name('verification.verify');
-// 
-// Route::post('/email/verification-notification', function (Request $request) {
-//     $request->user()->sendEmailVerificationNotification();
-//     return back()->with('message', 'Verification link sent!');
-// })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
-// 
-// // Routes de confirmation de mot de passe
-// Route::get('/confirm-password', function () {
-//     return view('auth.confirm-password');
-// })->middleware('auth')->name('password.confirm');
-// 
-// Route::post('/confirm-password', function (Request $request) {
-//     if (! Auth::guard('web')->validate([
-//         'email' => $request->user()->email,
-//         'password' => $request->password,
-//     ])) {
-//         throw ValidationException::withMessages([
-//             'password' => __('auth.password'),
-//         ]);
-//     }
-// 
-//     $request->session()->passwordConfirmed();
-// 
-//     return redirect()->intended();
-// })->middleware('auth')->name('password.confirm');
-
-require __DIR__.'/auth.php';
+require_once __DIR__.'/auth.php';
 
 // Routes de santé/statut
 Route::get('/health', function () {
