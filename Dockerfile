@@ -24,8 +24,10 @@ ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/000-default.conf
 RUN a2enmod rewrite
 
-# Fix MPM Conflict: Disable all MPMs then enable prefork (standard for PHP)
-RUN a2dismod mpm_event && a2dismod mpm_worker && a2enmod mpm_prefork
+# Fix MPM Conflict: Manually remove all MPM symlinks before enabling prefork
+RUN rm -f /etc/apache2/mods-enabled/mpm_*.load \
+    && rm -f /etc/apache2/mods-enabled/mpm_*.conf \
+    && a2enmod mpm_prefork
 
 # Configuration PHP Custom (Memory limit, timeouts)
 RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory-limit.ini
