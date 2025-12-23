@@ -1,7 +1,7 @@
 FROM php:8.2-apache
 
-# Installation des dépendances système
-RUN apt-get update && apt-get install -y \
+# Installation des dépendances système (Sans recommendations pour éviter les conflits Apache)
+RUN apt-get update && apt-get install -y --no-install-recommends \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
@@ -11,7 +11,8 @@ RUN apt-get update && apt-get install -y \
     curl \
     libpq-dev \
     nodejs \
-    npm
+    npm \
+    && rm -rf /var/lib/apt/lists/*
 
 # Configuration PHP
 RUN docker-php-ext-install pdo_pgsql mbstring exif pcntl bcmath gd
@@ -24,9 +25,13 @@ ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/000-default.conf
 RUN a2enmod rewrite
 
-# Fix MPM Conflict: Manually remove all MPM symlinks before enabling prefork
-RUN rm -f /etc/apache2/mods-enabled/mpm_*.load \
-    && rm -f /etc/apache2/mods-enabled/mpm_*.conf \
+# Fix MPM Conflict: Forcefully remove conflicting configurations installed by apt
+RUN rm -f /etc/apache2/mods-enabled/mpm_event.load \
+    && rm -f /etc/apache2/mods-enabled/mpm_event.conf \
+    && rm -f /etc/apache2/mods-enabled/mpm_worker.load \
+    && rm -f /etc/apache2/mods-enabled/mpm_worker.conf \
+    && a2dismod mpm_event || true \
+    && a2dismod mpm_worker || true \
     && a2enmod mpm_prefork
 
 # Configuration PHP Custom (Memory limit, timeouts)
