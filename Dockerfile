@@ -24,6 +24,9 @@ ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/000-default.conf
 RUN a2enmod rewrite
 
+# Fix MPM Conflict: Disable all MPMs then enable prefork (standard for PHP)
+RUN a2dismod mpm_event && a2dismod mpm_worker && a2enmod mpm_prefork
+
 # Configuration PHP Custom (Memory limit, timeouts)
 RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory-limit.ini
 RUN echo "upload_max_filesize=50M" > /usr/local/etc/php/conf.d/uploads.ini
