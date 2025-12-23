@@ -118,4 +118,9 @@ class MediaController extends Controller
         return redirect()->route('media.index')
             ->with('success', 'Média supprimé avec succès.');
     }
+
+    public function upload(Request $request)
+    {
+        return $this->store($request);
+    }
 }

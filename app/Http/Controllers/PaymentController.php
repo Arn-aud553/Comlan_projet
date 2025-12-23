@@ -11,6 +11,17 @@ use App\Models\Media;
 
 class PaymentController extends Controller
 {
+    public function show($type, $id)
+    {
+        if ($type === 'contenu') {
+            $item = Contenu::findOrFail($id);
+        } else {
+            $item = Media::findOrFail($id);
+        }
+        
+        return view('client.paiement.show', compact('item', 'type'));
+    }
+
     public function process(Request $request, $id, $type = 'contenu')
     {
         try {

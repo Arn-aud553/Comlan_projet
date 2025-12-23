@@ -1,0 +1,50 @@
+Duplicate Route Names:
+Array
+(
+)
+
+Broken Routes (Missing Controller/Method):
+Array
+(
+    [0] => Missing Method: App\Http\Controllers\PaymentController@cancel for route paiement/cancel/{type}/{id}
+    [1] => Missing Method: App\Http\Controllers\UserController@activate for route admin/users/{id}/activate
+    [2] => Missing Method: App\Http\Controllers\UserController@deactivate for route admin/users/{id}/deactivate
+    [3] => Missing Method: App\Http\Controllers\UserController@makeAdmin for route admin/users/{id}/make-admin
+    [4] => Missing Method: App\Http\Controllers\UserController@removeAdmin for route admin/users/{id}/remove-admin
+    [5] => Missing Method: App\Http\Controllers\AdminController@validateContenu for route admin/contenus/{id}/validate
+    [6] => Missing Method: App\Http\Controllers\AdminController@rejectContenu for route admin/contenus/{id}/reject
+    [7] => Missing Method: App\Http\Controllers\AdminController@publishContenu for route admin/contenus/{id}/publish
+    [8] => Missing Method: App\Http\Controllers\AdminController@unpublishContenu for route admin/contenus/{id}/unpublish
+    [9] => Missing Method: App\Http\Controllers\AdminController@createMedia for route admin/media/create
+    [10] => Missing Method: App\Http\Controllers\AdminController@storeMedia for route admin/media
+    [11] => Missing Method: App\Http\Controllers\AdminController@showMedia for route admin/media/{id}
+    [12] => Missing Method: App\Http\Controllers\AdminController@editMedia for route admin/media/{id}/edit
+    [13] => Missing Method: App\Http\Controllers\AdminController@updateMedia for route admin/media/{id}
+    [14] => Missing Method: App\Http\Controllers\AdminController@destroyMedia for route admin/media/{id}
+    [15] => Missing Method: App\Http\Controllers\AdminController@approveMedia for route admin/media/{id}/approve
+    [16] => Missing Method: App\Http\Controllers\AdminController@rejectMedia for route admin/media/{id}/reject
+    [17] => Missing Method: App\Http\Controllers\AdminController@reports for route admin/statistics/reports
+    [18] => Missing Method: App\Http\Controllers\ClientDashboardController@editContenu for route client/contenus/{id}/edit
+    [19] => Missing Method: App\Http\Controllers\ClientDashboardController@updateContenu for route client/contenus/{id}
+    [20] => Missing Method: App\Http\Controllers\ClientDashboardController@destroyContenu for route client/contenus/{id}
+    [21] => Missing Method: App\Http\Controllers\ClientDashboardController@contributeContenus for route client/contribute/contenus
+    [22] => Missing Method: App\Http\Controllers\ClientDashboardController@contributeMedia for route client/contribute/media
+    [23] => Missing Method: App\Http\Controllers\ClientDashboardController@submitContribution for route client/contribute/submit
+    [24] => Missing Method: App\Http\Controllers\ClientDashboardController@activity for route client/activity
+    [25] => Missing Method: App\Http\Controllers\ClientDashboardController@purchases for route client/activity/purchases
+    [26] => Missing Method: App\Http\Controllers\ClientDashboardController@uploads for route client/activity/uploads
+    [27] => Missing Method: App\Http\Controllers\ClientDashboardController@views for route client/activity/views
+    [28] => Missing Method: App\Http\Controllers\ClientDashboardController@search for route client/search
+    [29] => Missing Method: App\Http\Controllers\ClientDashboardController@advancedSearch for route client/search/advanced
+    [30] => Missing Method: App\Http\Controllers\ClientDashboardController@searchResults for route client/search/results
+    [31] => Missing Method: App\Http\Controllers\ClientDashboardController@followUser for route client/users/{id}/follow
+    [32] => Missing Method: App\Http\Controllers\ClientDashboardController@unfollowUser for route client/users/{id}/unfollow
+    [33] => Missing Method: App\Http\Controllers\ClientDashboardController@apiSearch for route api/search
+    [34] => Missing Method: App\Http\Controllers\ClientDashboardController@apiStats for route api/stats
+    [35] => Missing Method: App\Http\Controllers\ClientDashboardController@apiUploadMedia for route api/media/upload
+    [36] => Missing Method: App\Http\Controllers\ClientDashboardController@apiToggleFavorite for route api/favorite/{type}/{id}
+    [37] => Missing Method: App\Http\Controllers\ClientDashboardController@apiDeleteComment for route api/comment/{id}
+    [38] => Missing Method: App\Http\Controllers\ClientDashboardController@apiNotifications for route api/notifications
+    [39] => Missing Method: App\Http\Controllers\ClientDashboardController@apiMarkNotificationRead for route api/notifications/read/{id}
+    [40] => Missing Method: App\Http\Controllers\ClientDashboardController@apiMarkAllNotificationsRead for route api/notifications/read-all
+)
