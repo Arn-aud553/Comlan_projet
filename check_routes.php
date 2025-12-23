@@ -1,32 +1,47 @@
 <?php
+
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
+
 require __DIR__.'/vendor/autoload.php';
 $app = require_once __DIR__.'/bootstrap/app.php';
-$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
-$kernel->bootstrap();
+$app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
 
-$routes = collect(Illuminate\Support\Facades\Route::getRoutes())->map(function($r) {
-    return $r->getName();
-})->filter()->countBy()->filter(function($c) {
-    return $c > 1;
-});
+$routes = Route::getRoutes();
 
-echo "Duplicate Route Names:\n";
-print_r($routes->toArray());
-
+$duplicates = [];
 $brokenRoutes = [];
-foreach (Illuminate\Support\Facades\Route::getRoutes() as $route) {
+$routeNames = [];
+
+foreach ($routes as $route) {
+    // Check for duplicate names
+    $name = $route->getName();
+    if ($name) {
+        if (isset($routeNames[$name])) {
+            $duplicates[] = $name;
+        }
+        $routeNames[$name] = true;
+    }
+
+    // Check for missing controllers/methods
     $action = $route->getAction();
-    if (isset($action['controller']) && is_string($action['controller']) && str_contains($action['controller'], '@')) {
-        $parts = explode('@', $action['controller']);
-        $class = $parts[0];
-        $method = $parts[1] ?? null;
-        if (!class_exists($class)) {
-            $brokenRoutes[] = "Missing Class: $class for route " . $route->uri();
-        } elseif ($method && !method_exists($class, $method)) {
-            $brokenRoutes[] = "Missing Method: $class@$method for route " . $route->uri();
+    if (isset($action['controller'])) {
+        if (strpos($action['controller'], '@') !== false) {
+            list($controller, $method) = explode('@', $action['controller']);
+            if (!class_exists($controller)) {
+                $brokenRoutes[] = "Missing Controller: $controller";
+            } else {
+                if (!method_exists($controller, $method)) {
+                    $brokenRoutes[] = "Missing Method: $controller@$method for route " . $route->uri();
+                }
+            }
         }
     }
 }
 
-echo "\nBroken Routes (Missing Controller/Method):\n";
-print_r($brokenRoutes);
+// Output results
+$output = "Duplicate Route Names:\n" . print_r($duplicates, true) . "\n\n";
+$output .= "Broken Routes (Missing Controller/Method):\n" . print_r($brokenRoutes, true) . "\n";
+
+file_put_contents('broken_report.txt', $output);
+echo "Report written to broken_report.txt\n";

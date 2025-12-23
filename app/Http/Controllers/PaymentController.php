@@ -82,4 +82,10 @@ class PaymentController extends Controller
             return view('client.media.paiement-success', compact('item'));
         }
     }
+
+    public function cancel($type, $id)
+    {
+        return redirect()->route('client.' . $type . 's.detail', $id)
+            ->with('warning', 'Le paiement a été annulé.');
+    }
 }

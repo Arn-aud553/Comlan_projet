@@ -2,144 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
     /**
-     * Afficher la page de connexion
-     */
-    public function showLoginForm()
-    {
-        if (Auth::check()) {
-            return $this->redirectBasedOnRole();
-        }
-        return view('auth.login');
-    }
-
-    /**
-     * Traiter la connexion
-     */
-    public function login(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'password' => 'required|min:6',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-
-        $credentials = $request->only('email', 'password');
-
-        if (Auth::attempt($credentials, $request->remember)) {
-            $request->session()->regenerate();
-            
-            // Message de bienvenue
-            $user = Auth::user();
-            $welcomeMessages = [
-                "Bienvenue {$user->nom_complet} ! Prêt à partager notre culture ?",
-                "Content de vous revoir {$user->nom_complet} !",
-                "{$user->nom_complet}, votre contribution compte pour notre patrimoine !"
-            ];
-            
-            session()->flash('success', $welcomeMessages[array_rand($welcomeMessages)]);
-            
-            return $this->redirectBasedOnRole();
-        }
-
-        return redirect()->back()
-            ->withInput()
-            ->withErrors(['email' => 'Les identifiants sont incorrects.']);
-    }
-
-    /**
-     * Rediriger selon le rôle de l'utilisateur
-     */
-    private function redirectBasedOnRole()
-    {
-        $user = Auth::user();
-        
-        // Liste des emails admin/manager
-        $adminEmails = ['maurice.comlan@uac.bj', 'arnaudkpodji@gmail.com'];
-        
-        if (in_array($user->email, $adminEmails) || $user->estAdmin()) {
-            return redirect()->route('admin.dashboard');
-        } else {
-            return redirect()->route('client.dashboard');
-        }
-    }
-
-    /**
-     * Déconnexion
-     */
-    public function logout(Request $request)
-    {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        
-        return redirect('/')->with('info', 'Vous êtes déconnecté.');
-    }
-
-    /**
-     * Afficher le formulaire d'inscription
-     */
-    public function showRegisterForm()
-    {
-        return view('auth.register');
-    }
-
-    /**
-     * Traiter l'inscription
-     */
-    public function register(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-
-        $user = \App\Models\User::create([
-            'name' => $request->name,
-            'nom_complet' => $request->name,
-            'email' => $request->email,
-            'password' => $request->password, // Le mutator va le hasher
-        ]);
-
-        Auth::login($user);
-        
-        session()->flash('success', 'Compte créé avec succès ! Bienvenue sur Culture Benin.');
-        
-        return $this->redirectBasedOnRole();
-    }
-
-    // ========== MÉTHODES CRUD POUR ROUTE RESOURCE ==========
-
-    /**
-     * Afficher la liste des utilisateurs (pour admin)
+     * Display a listing of the resource.
      */
     public function index()
     {
-        $users = \App\Models\User::orderBy('created_at', 'desc')->paginate(15);
+        $users = User::orderBy('created_at', 'desc')->paginate(10);
         return view('admin.users.index', compact('users'));
     }
 
     /**
-     * Afficher le formulaire de création d'utilisateur
+     * Show the form for creating a new resource.
      */
     public function create()
     {
@@ -147,94 +27,97 @@ class UserController extends Controller
     }
 
     /**
-     * Enregistrer un nouvel utilisateur (méthode CRUD)
+     * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'role' => 'required|string|in:admin,manager,editeur,auteur,visiteur',
-            'langue' => 'nullable|string',
+            'password' => 'required|string|min:8|confirmed',
+            'role' => ['required', Rule::in(['admin', 'manager', 'visiteur', 'auteur'])],
         ]);
 
-        // Générer un mot de passe automatique : email + "123"
-        $emailPrefix = explode('@', $validated['email'])[0];
-        $autoPassword = $emailPrefix . '123';
+        $validatedData['password'] = Hash::make($validatedData['password']);
 
-        $user = \App\Models\User::create([
-            'name' => $validated['name'],
-            'nom_complet' => $validated['name'], // Assurer que le nom complet est rempli
-            'email' => $validated['email'],
-            'password' => $autoPassword,
-            'role' => $validated['role'],
-            'langue' => $validated['langue'] ?? 'fr',
-            'email_verified_at' => now(), // Marquer comme vérifié immédiatement
-        ]);
+        User::create($validatedData);
 
         return redirect()->route('admin.users.index')
-            ->with('success', "Utilisateur créé avec succès. Mot de passe : {$autoPassword}");
+            ->with('success', 'Utilisateur créé avec succès.');
     }
 
     /**
-     * Afficher un utilisateur spécifique
+     * Display the specified resource.
      */
-    public function show($id)
+    public function show(User $user)
     {
-        $user = \App\Models\User::findOrFail($id);
         return view('admin.users.show', compact('user'));
     }
 
     /**
-     * Afficher le formulaire d'édition d'un utilisateur
+     * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        $user = \App\Models\User::findOrFail($id);
         return view('admin.users.edit', compact('user'));
     }
 
     /**
-     * Mettre à jour un utilisateur
+     * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        $user = \App\Models\User::findOrFail($id);
-
-        $validated = $request->validate([
+        $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
-            'role' => 'required|string|in:admin,manager,editeur,auteur,visiteur',
-            'langue' => 'nullable|string',
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'role' => ['required', Rule::in(['admin', 'manager', 'visiteur', 'auteur'])],
         ]);
 
-        $user->update([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'role' => $validated['role'],
-            'langue' => $validated['langue'] ?? $user->langue,
-        ]);
+        if ($request->filled('password')) {
+            $request->validate([
+                'password' => 'string|min:8|confirmed',
+            ]);
+            $validatedData['password'] = Hash::make($request->password);
+        }
+
+        $user->update($validatedData);
 
         return redirect()->route('admin.users.index')
             ->with('success', 'Utilisateur mis à jour avec succès.');
     }
 
     /**
-     * Supprimer un utilisateur
+     * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        $user = \App\Models\User::findOrFail($id);
-        
-        // Empêcher la suppression de son propre compte
-        if ($user->id === Auth::id()) {
-            return redirect()->route('admin.users.index')
-                ->with('error', 'Vous ne pouvez pas supprimer votre propre compte.');
-        }
-
         $user->delete();
 
         return redirect()->route('admin.users.index')
             ->with('success', 'Utilisateur supprimé avec succès.');
+    }
+
+    public function activate($id)
+    {
+        User::findOrFail($id)->update(['is_active' => true]);
+        return back()->with('success', 'Utilisateur activé.');
+    }
+
+    public function deactivate($id)
+    {
+        User::findOrFail($id)->update(['is_active' => false]);
+        return back()->with('success', 'Utilisateur désactivé.');
+    }
+
+    public function makeAdmin($id)
+    {
+        User::findOrFail($id)->update(['role' => 'admin']);
+        return back()->with('success', 'Promu administrateur.');
+    }
+
+    public function removeAdmin($id)
+    {
+        User::findOrFail($id)->update(['role' => 'visiteur']);
+        return back()->with('success', 'Rétrogradé visiteur.');
     }
 }

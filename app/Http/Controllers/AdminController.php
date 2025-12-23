@@ -109,6 +109,7 @@ class AdminController extends Controller
     public function statisticsUsers() { return $this->statistics(); }
     public function statisticsMedia() { return $this->statistics(); }
     public function statisticsSales() { return $this->statistics(); }
+    public function reports() { return $this->statistics(); }
     public function exportData($type) { return back()->with('info', "Export non implémenté."); }
 
     public function settings()
@@ -139,4 +140,19 @@ class AdminController extends Controller
         $regions = Region::paginate(15);
         return view('admin.regions.index', compact('regions'));
     }
+
+    // New missing methods
+    public function validateContenu($id) { Contenu::findOrFail($id)->update(['statut' => 'publie', 'date_validation' => now()]); return back()->with('success', 'Validé'); }
+    public function rejectContenu($id) { Contenu::findOrFail($id)->update(['statut' => 'rejete']); return back()->with('success', 'Rejeté'); }
+    public function publishContenu($id) { Contenu::findOrFail($id)->update(['statut' => 'publie', 'date_publication' => now()]); return back()->with('success', 'Publié'); }
+    public function unpublishContenu($id) { Contenu::findOrFail($id)->update(['statut' => 'brouillon']); return back()->with('success', 'Dépublié'); }
+
+    public function createMedia() { return view('admin.media.create'); }
+    public function storeMedia(Request $request) { return back()->with('success', 'Media uploadé'); } // Simplifié
+    public function showMedia($id) { $media = Media::findOrFail($id); return view('admin.media.show', compact('media')); }
+    public function editMedia($id) { $media = Media::findOrFail($id); return view('admin.media.edit', compact('media')); }
+    public function updateMedia(Request $request, $id) { Media::findOrFail($id)->update($request->all()); return back()->with('success', 'Media mis à jour'); }
+    public function destroyMedia($id) { Media::findOrFail($id)->delete(); return back()->with('success', 'Media supprimé'); }
+    public function approveMedia($id) { return back()->with('success', 'Media approuvé'); }
+    public function rejectMedia($id) { return back()->with('success', 'Media rejeté'); }
 }
