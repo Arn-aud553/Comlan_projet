@@ -65,6 +65,8 @@ RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 # Port
 EXPOSE 80
 
-# Commande de démarrage (Migrations automatique optionnelle mais recommandée sur Railway via script start.sh ou CMD)
-# Ici on lance Apache en premier plan
-CMD php artisan migrate --force && apache2-foreground
+# Script de démarrage robuste
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+CMD ["/usr/local/bin/docker-entrypoint.sh"]
