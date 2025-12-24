@@ -1,79 +1,34 @@
 <?php
 /**
- * Diagnostic script for Laravel on Railway
+ * EMERGENCY Diagnostic script (No dependencies)
  */
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-echo "<h1>Laravel Diagnostic Script</h1>";
+echo "<h1>Laravel Diagnostic Script v6 (Emergency)</h1>";
+echo "<p>Si vous voyez cette page, le serveur web (Apache) fonctionne !</p>";
 
-echo "<h2>0. URL & Domain Verification</h2>";
-echo "Current URL being visited: <strong>" . (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]</strong><br>";
-echo "Server Hostname: <strong>" . gethostname() . "</strong><br>";
+echo "<h2>1. Variables d'environnement de base</h2>";
+echo "PORT: " . getenv('PORT') . "<br>";
+echo "DATABASE_URL: " . (getenv('DATABASE_URL') ? "✅ Present" : "❌ Absent") . "<br>";
+echo "APP_KEY: " . (getenv('APP_KEY') ? "✅ Present" : "❌ Absent") . "<br>";
 
-echo "<h2>1. Environment Variables Check</h2>";
-$required_vars = ['APP_KEY', 'DB_CONNECTION', 'DB_HOST', 'DB_DATABASE', 'DB_USERNAME', 'DB_PASSWORD', 'DATABASE_URL', 'PGHOST', 'APP_URL'];
-echo "<ul>";
-foreach ($required_vars as $var) {
-    if (isset($_SERVER[$var])) {
-        $val = $_SERVER[$var];
-    } elseif (isset($_ENV[$var])) {
-        $val = $_ENV[$var];
-    } else {
-        $val = getenv($var);
-    }
-    
-    $status = $val ? "✅ getenv() OK" : "❌ getenv() MISSING";
-    if (preg_match("/(PASS|KEY|SECRET|TOKEN|AUTH)/i", $var)) $mask = "********"; else $mask = $val;
-    echo "<li><strong>$var</strong>: $status ($mask)</li>";
-}
-echo "</ul>";
+echo "<h2>2. Hostname interne</h2>";
+echo "Hostname : <strong>" . gethostname() . "</strong><br>";
 
-echo "<h3>FULL \$_SERVER Dump:</h3>";
-echo "<ul>";
-foreach ($_SERVER as $key => $value) {
-    if (is_array($value)) $value = "Array(" . count($value) . ")";
-    if (preg_match("/(PASS|KEY|SECRET|TOKEN|AUTH)/i", $key)) $value = "********";
-    echo "<li><strong>$key</strong>: $value</li>";
-}
-echo "</ul>";
-
-echo "<h3>.env File Check:</h3>";
-if (file_exists('../.env')) {
-    echo "✅ .env file exists.<br>";
-    echo "<pre>" . shell_exec('cat ../.env | sed -E "s/=(.*)/=********/"') . "</pre>";
+echo "<h2>3. Logs de démarrage</h2>";
+if (file_exists('/tmp/deploy.log')) {
+    echo "<pre>" . file_get_contents('/tmp/deploy.log') . "</pre>";
 } else {
-    echo "❌ .env file does NOT exist.<br>";
+    echo "❌ Aucun log trouvé dans /tmp/deploy.log.<br>";
 }
 
-echo "<h2>2. PHP Extensions Check</h2>";
-$extensions = ['pdo_pgsql', 'pdo_sqlite', 'mbstring', 'openssl', 'gd'];
-foreach ($extensions as $ext) {
-    echo "Extension <strong>$ext</strong>: " . (extension_loaded($ext) ? "✅ OK" : "❌ MISSING") . "<br>";
-}
+echo "<h2>4. Super-globales</h2>";
+echo "<pre>";
+print_r(array_filter($_SERVER, function($k) { 
+    return preg_match('/RAILWAY|SERVICE|PROJECT|PORT|HTTP_HOST/', $k); 
+}, ARRAY_FILTER_USE_KEY));
+echo "</pre>";
 
-echo "<h2>3. Database Discovery</h2>";
-try {
-    if (file_exists(__DIR__.'/../vendor/autoload.php')) {
-        require_once __DIR__.'/../vendor/autoload.php';
-        if (file_exists(__DIR__.'/../bootstrap/app.php')) {
-            $app = require_once __DIR__.'/../bootstrap/app.php';
-            echo "✅ Application bootstrapped.<br>";
-            if (function_exists('config')) {
-                echo "Default connection: " . config('database.default') . "<br>";
-            }
-        }
-    }
-} catch (Exception $e) {
-    echo "❌ DB Discovery failed: " . $e->getMessage() . "<br>";
-}
-
-echo "<h2>4. Directory Permissions Check</h2>";
-$dirs = ['../storage' => 0775, '../storage/logs' => 0775, '../bootstrap/cache' => 0775];
-foreach ($dirs as $path => $perm) {
-    $fullPath = realpath($path);
-    echo "Directory <strong>$path</strong>: " . ($fullPath && is_writable($fullPath) ? "✅ Writable" : "❌ NOT WRITABLE") . "<br>";
-}
-
-echo "<hr><p>End of diagnostics.</p>";
+echo "<hr><p>Fin du diagnostic d'urgence.</p>";
