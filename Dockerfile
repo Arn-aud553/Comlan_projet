@@ -24,6 +24,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Configuration Apache - Racine web vers /public
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/000-default.conf
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 RUN a2enmod rewrite
 
 # Fix MPM Conflict: Forcefully remove conflicting configurations installed by apt

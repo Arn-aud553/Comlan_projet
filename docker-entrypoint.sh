@@ -17,5 +17,11 @@ fi
 echo "Running migrations..."
 php artisan migrate --force
 
+echo "Optimizing configuration..."
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
+php artisan cache:clear
+
 echo "Starting Apache..."
 exec apache2-foreground
