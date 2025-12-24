@@ -13,14 +13,17 @@ $required_vars = ['APP_KEY', 'DB_CONNECTION', 'DB_HOST', 'DB_DATABASE', 'DB_USER
 echo "<ul>";
 foreach ($required_vars as $var) {
     $val = getenv($var);
-    $status = $val ? "✅ Set" : "❌ MISSING";
+    $server_val = isset($_SERVER[$var]) ? "Set in \$_SERVER" : "Missing in \$_SERVER";
+    $env_val = isset($_ENV[$var]) ? "Set in \$_ENV" : "Missing in \$_ENV";
+    
+    $status = $val ? "✅ getenv() OK" : "❌ getenv() MISSING";
     if ($var === 'APP_KEY' && $val) {
         $status .= " (Length: " . strlen($val) . ")";
     }
     if ($var === 'DB_PASSWORD' && $val) {
         $val = "********";
     }
-    echo "<li><strong>$var</strong>: $status ($val)</li>";
+    echo "<li><strong>$var</strong>: $status | $server_val | $env_val</li>";
 }
 echo "</ul>";
 
