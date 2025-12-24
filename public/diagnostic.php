@@ -27,6 +27,13 @@ echo "</ul>";
 echo "<h3>Raw Environment (shell_exec):</h3>";
 echo "<pre>" . shell_exec('env | grep -E "^(APP_|DB_|PORT)"') . "</pre>";
 
+echo "<h3>PHP getenv() Check:</h3>";
+echo "<pre>";
+print_r(array_filter(getenv(), function($k) { 
+    return preg_match("/^(APP_|DB_|PORT)/", $k); 
+}, ARRAY_FILTER_USE_KEY));
+echo "</pre>";
+
 echo "<h3>.env File Check:</h3>";
 if (file_exists('../.env')) {
     echo "✅ .env file exists.<br>";

@@ -1,12 +1,19 @@
 #!/bin/bash
 set -e
 
-# Create .env file from environment variables
-# This is the most reliable way to ensure Laravel sees Railway variables
-echo "Generating .env from Railway environment..."
-env | grep -E '^(APP_|DB_|REDIS_|MAIL_|LOG_|SESSION_|QUEUE_|FILESYSTEM_|VITE_|_PORT|PORT)' > /var/www/html/.env
-# Append PORT to .env as APP_URL might need it or just for consistency
-echo "PORT=$PORT" >> /var/www/html/.env
+# Create .env file from environment variables using PHP
+# (Since we know PHP CLI sees them because migrations work)
+echo "Generating .env from Railway environment using PHP..."
+php -r '
+    $vars = getenv();
+    $output = "";
+    foreach ($vars as $key => $value) {
+        if (preg_match("/^(APP_|DB_|REDIS_|MAIL_|LOG_|SESSION_|QUEUE_|FILESYSTEM_|VITE_|_PORT|PORT)/", $key)) {
+            $output .= "$key=$value\n";
+        }
+    }
+    file_put_contents("/var/www/html/.env", $output);
+'
 chown www-data:www-data /var/www/html/.env
 chmod 644 /var/www/html/.env
 
