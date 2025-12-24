@@ -27,6 +27,14 @@ echo "</ul>";
 echo "<h3>Raw Environment (shell_exec):</h3>";
 echo "<pre>" . shell_exec('env | grep -E "^(APP_|DB_|PORT)"') . "</pre>";
 
+echo "<h3>.env File Check:</h3>";
+if (file_exists('../.env')) {
+    echo "✅ .env file exists.<br>";
+    echo "<pre>" . shell_exec('grep -E "^(APP_|DB_|PORT)" ../.env | sed "s/=.*/=********/"') . "</pre>";
+} else {
+    echo "❌ .env file does NOT exist.<br>";
+}
+
 echo "<h2>2. PHP Extensions Check</h2>";
 $extensions = ['pdo_pgsql', 'mbstring', 'openssl', 'gd'];
 foreach ($extensions as $ext) {

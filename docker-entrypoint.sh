@@ -1,10 +1,14 @@
 #!/bin/bash
 set -e
 
-# Pass environment variables to Apache
-# This ensures that variables set in Railway are visible to PHP-Apache
-echo "Configuring environment for Apache..."
-env | grep -E '^(APP_|DB_|REDIS_|MAIL_|LOG_|SESSION_|QUEUE_|FILESYSTEM_|VITE_|_PORT|PORT)' | sed 's/^/export /' >> /etc/apache2/envvars
+# Create .env file from environment variables
+# This is the most reliable way to ensure Laravel sees Railway variables
+echo "Generating .env from Railway environment..."
+env | grep -E '^(APP_|DB_|REDIS_|MAIL_|LOG_|SESSION_|QUEUE_|FILESYSTEM_|VITE_|_PORT|PORT)' > /var/www/html/.env
+# Append PORT to .env as APP_URL might need it or just for consistency
+echo "PORT=$PORT" >> /var/www/html/.env
+chown www-data:www-data /var/www/html/.env
+chmod 644 /var/www/html/.env
 
 # Fix Apache MPM conflict at runtime
 rm -f /etc/apache2/mods-enabled/mpm_event.load /etc/apache2/mods-enabled/mpm_event.conf
