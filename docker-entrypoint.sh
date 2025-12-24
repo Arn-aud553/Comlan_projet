@@ -4,14 +4,7 @@ set -e
 # Pass environment variables to Apache
 # This ensures that variables set in Railway are visible to PHP-Apache
 echo "Configuring environment for Apache..."
-env | grep -v "HOME\|PWD\|PATH" | while read -r line; do
-    # Extract name and value, handling cases with '=' in the value
-    name="${line%%=*}"
-    value="${line#*=}"
-    # Quote the value and escape quotes for Apache config
-    echo "SetEnv $name \"${value//\"/\\\"}\"" >> /etc/apache2/conf-available/railway-env.conf
-done
-a2enconf railway-env
+env | grep -E '^(APP_|DB_|REDIS_|MAIL_|LOG_|SESSION_|QUEUE_|FILESYSTEM_|VITE_|_PORT|PORT)' | sed 's/^/export /' >> /etc/apache2/envvars
 
 # Fix Apache MPM conflict at runtime
 rm -f /etc/apache2/mods-enabled/mpm_event.load /etc/apache2/mods-enabled/mpm_event.conf
