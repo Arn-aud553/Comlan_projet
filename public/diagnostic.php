@@ -8,32 +8,41 @@ ini_set('display_errors', 1);
 
 echo "<h1>Laravel Diagnostic Script</h1>";
 
+echo "<h2>0. URL & Domain Verification</h2>";
+echo "Current URL being visited: <strong>" . (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]</strong><br>";
+echo "Server Hostname: <strong>" . gethostname() . "</strong><br>";
+
 echo "<h2>1. Environment Variables Check</h2>";
-$required_vars = ['APP_KEY', 'DB_CONNECTION', 'DB_HOST', 'DB_DATABASE', 'DB_USERNAME', 'DB_PASSWORD', 'DATABASE_URL', 'PGHOST'];
+$required_vars = ['APP_KEY', 'DB_CONNECTION', 'DB_HOST', 'DB_DATABASE', 'DB_USERNAME', 'DB_PASSWORD', 'DATABASE_URL', 'PGHOST', 'APP_URL'];
 echo "<ul>";
 foreach ($required_vars as $var) {
-    $val = getenv($var);
-    $server_val = isset($_SERVER[$var]) ? "✅ In \$_SERVER" : "❌ No \$_SERVER";
-    $env_val = isset($_ENV[$var]) ? "✅ In \$_ENV" : "❌ No \$_ENV";
+    if (isset($_SERVER[$var])) {
+        $val = $_SERVER[$var];
+    } elseif (isset($_ENV[$var])) {
+        $val = $_ENV[$var];
+    } else {
+        $val = getenv($var);
+    }
     
     $status = $val ? "✅ getenv() OK" : "❌ getenv() MISSING";
-    echo "<li><strong>$var</strong>: $status | $server_val | $env_val</li>";
+    if (preg_match("/(PASS|KEY|SECRET|TOKEN|AUTH)/i", $var)) $mask = "********"; else $mask = $val;
+    echo "<li><strong>$var</strong>: $status ($mask)</li>";
 }
 echo "</ul>";
 
-echo "<h3>FULL Environment Dump (Exhaustive):</h3>";
+echo "<h3>FULL \$_SERVER Dump:</h3>";
 echo "<ul>";
 foreach ($_SERVER as $key => $value) {
+    if (is_array($value)) $value = "Array(" . count($value) . ")";
     if (preg_match("/(PASS|KEY|SECRET|TOKEN|AUTH)/i", $key)) $value = "********";
-    echo "<li><strong>\$_SERVER['$key']</strong>: $value</li>";
+    echo "<li><strong>$key</strong>: $value</li>";
 }
 echo "</ul>";
 
 echo "<h3>.env File Check:</h3>";
 if (file_exists('../.env')) {
     echo "✅ .env file exists.<br>";
-    echo "Content (Masked):<br>";
-    echo "<pre>" . shell_exec('cat ../.env | sed "s/=.*/=********/"') . "</pre>";
+    echo "<pre>" . shell_exec('cat ../.env | sed -E "s/=(.*)/=********/"') . "</pre>";
 } else {
     echo "❌ .env file does NOT exist.<br>";
 }
@@ -46,76 +55,25 @@ foreach ($extensions as $ext) {
 
 echo "<h2>3. Database Discovery</h2>";
 try {
-    require __DIR__.'/../vendor/autoload.php';
-    $app = require_once __DIR__.'/../bootstrap/app.php';
-    
-    $default = config('database.default');
-    echo "Default connection in Laravel: <strong>$default</strong><br>";
-    
-    if ($default === 'sqlite') {
-        $path = config('database.connections.sqlite.database');
-        echo "SQLite database path: $path<br>";
-        if (file_exists($path)) {
-            echo "✅ SQLite file exists. (Size: " . filesize($path) . " bytes)<br>";
+    if (file_exists(__DIR__.'/../vendor/autoload.php')) {
+        require_once __DIR__.'/../vendor/autoload.php';
+        if (file_exists(__DIR__.'/../bootstrap/app.php')) {
+            $app = require_once __DIR__.'/../bootstrap/app.php';
+            echo "✅ Application bootstrapped.<br>";
+            if (function_exists('config')) {
+                echo "Default connection: " . config('database.default') . "<br>";
+            }
         }
     }
 } catch (Exception $e) {
     echo "❌ DB Discovery failed: " . $e->getMessage() . "<br>";
 }
-$driver = getenv('DB_CONNECTION');
-$host = getenv('DB_HOST');
-$port = getenv('DB_PORT') ?: '5432';
-$db = getenv('DB_DATABASE');
-$user = getenv('DB_USERNAME');
-$pass = getenv('DB_PASSWORD');
-
-if ($driver === 'pgsql') {
-    try {
-        $dsn = "pgsql:host=$host;port=$port;dbname=$db";
-        $pdo = new PDO($dsn, $user, $pass, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-        echo "✅ Connection to PostgreSQL successful!<br>";
-        
-        $result = $pdo->query("SELECT current_user, current_database()");
-        $row = $result->fetch();
-        echo "Connected as: " . $row['current_user'] . " to database: " . $row['current_database'] . "<br>";
-    } catch (Exception $e) {
-        echo "❌ Connection failed: " . $e->getMessage() . "<br>";
-    }
-} else {
-    echo "ℹ️ DB_CONNECTION is not 'pgsql' (current: $driver). Not testing PostgreSQL connection.<br>";
-}
 
 echo "<h2>4. Directory Permissions Check</h2>";
-$dirs = [
-    '../storage' => 0775,
-    '../storage/logs' => 0775,
-    '../storage/framework' => 0775,
-    '../bootstrap/cache' => 0775,
-];
-
+$dirs = ['../storage' => 0775, '../storage/logs' => 0775, '../bootstrap/cache' => 0775];
 foreach ($dirs as $path => $perm) {
     $fullPath = realpath($path);
-    if ($fullPath) {
-        $writable = is_writable($fullPath);
-        echo "Directory <strong>$path</strong>: " . ($writable ? "✅ Writable" : "❌ NOT WRITABLE") . " (Perms: " . substr(sprintf('%o', fileperms($fullPath)), -4) . ")<br>";
-    } else {
-        echo "Directory <strong>$path</strong>: ❌ DOES NOT EXIST<br>";
-    }
-}
-
-echo "<h2>5. Laravel Bootstrap Check</h2>";
-try {
-    require __DIR__.'/../vendor/autoload.php';
-    echo "✅ Autoloader loaded.<br>";
-    
-    $app = require_once __DIR__.'/../bootstrap/app.php';
-    echo "✅ Application bootstrapped.<br>";
-    
-    echo "Application Environment: " . $app->environment() . "<br>";
-    echo "Debug Mode: " . (config('app.debug') ? "True" : "False") . "<br>";
-    
-} catch (Exception $e) {
-    echo "❌ Bootstrap failed: " . $e->getMessage() . "<br>";
+    echo "Directory <strong>$path</strong>: " . ($fullPath && is_writable($fullPath) ? "✅ Writable" : "❌ NOT WRITABLE") . "<br>";
 }
 
 echo "<hr><p>End of diagnostics.</p>";
